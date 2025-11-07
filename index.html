@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>AIBOD ホワイトペーパー｜Lean Integration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="中小製造業のための「小さく産んで大きく育てる」デジタル変革戦略 - Lean Integration フレームワーク" />
+  <meta name="keywords" content="AIBOD, Lean Integration, DX, 製造業, デジタル変革, ノーコード, AI" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="AIBOD ホワイトペーパー｜Lean Integration" />
+  <meta property="og:description" content="中小製造業のための「小さく産んで大きく育てる」デジタル変革戦略" />
+  <meta property="og:url" content="https://yourusername.github.io/aibod-whitepaper/" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="AIBOD ホワイトペーパー｜Lean Integration" />
+  <meta property="twitter:description" content="中小製造業のための「小さく産んで大きく育てる」デジタル変革戦略" />
+  
+  <style>
+    :root {
+      --aibod-blue: #0068b6;
+      --aibod-light: #00b3ec;
+      --aibod-deep: #1d2087;
+      --text: #222;
+      --bg: #fff;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+      margin: 0;
+      padding: 0;
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+    header {
+      border-bottom: 4px solid var(--aibod-blue);
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+    }
+    h1 {
+      font-size: 1.9rem;
+      margin: 0 0 6px;
+      color: var(--aibod-blue);
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 2.2rem;
+      color: var(--aibod-deep);
+    }
+    h3 {
+      margin-top: 1.4rem;
+      color: #333;
+    }
+    p {
+      margin: 0 0 1rem;
+    }
+    .lead {
+      font-size: 1.02rem;
+      background: #f3f8fb;
+      border-left: 4px solid var(--aibod-light);
+      padding: 12px 16px;
+      margin-bottom: 1.6rem;
+    }
+    .tagline {
+      font-weight: 600;
+      color: #444;
+    }
+    .box {
+      background: #f7f7f7;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 1.2rem 0;
+    }
+    ul {
+      padding-left: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    li {
+      margin-bottom: .4rem;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 760px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+      .wrap {
+        padding: 26px 16px 60px;
+      }
+    }
+    footer {
+      margin-top: 3rem;
+      font-size: .85rem;
+      color: #666;
+    }
+    .label {
+      display: inline-block;
+      background: #e6f3ff;
+      color: #003f74;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: .75rem;
+      margin-bottom: .5rem;
+    }
+    .table-like {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 1rem 0 1.6rem;
+    }
+    .table-like-row {
+      display: flex;
+      border-bottom: 1px solid #eee;
+    }
+    .table-like-row:last-child {
+      border-bottom: none;
+    }
+    .table-like-head {
+      flex: 0 0 170px;
+      background: #f1f5f9;
+      padding: 10px 12px;
+      font-weight: 600;
+    }
+    .table-like-body {
+      flex: 1;
+      padding: 10px 12px;
+    }
+    .faq q {
+      font-weight: 600;
+    }
+    
+    /* Print styles */
+    @media print {
+      body {
+        font-size: 12pt;
+      }
+      .wrap {
+        max-width: none;
+        padding: 0;
+      }
+      header {
+        page-break-inside: avoid;
+      }
+      h2 {
+        page-break-before: auto;
+        page-break-after: avoid;
+      }
+    }
+    
+    /* アクセシビリティ向上 */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* 高コントラストモード対応 */
+    @media (prefers-contrast: high) {
+      :root {
+        --text: #000;
+        --aibod-blue: #003f74;
+        --aibod-deep: #000080;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>AIBOD ホワイトペーパー<br />Lean Integration — 中小製造業のための「小さく産んで大きく育てる」デジタル変革戦略</h1>
+      <p class="tagline">新しい技術を「使える技術に」するための現場起点の実装フレームワーク</p>
+    </header>
+
+    <p class="lead">
+      日本の中小ものづくり企業は、デジタル化・サプライチェーン変動・人手不足という三重苦の中にあります。一方で、従来型の大規模システム導入はコストもリードタイムも大きく、導入した時点で現場要件からずれていることも少なくありません。<br />
+      本ホワイトペーパーでは、AIBODが現場実装の経験からまとめた「Lean Integration」コンセプトを紹介します。これは、ノーコードと軽量バックエンドを組み合わせて、まず"動くもの"を立ち上げ、現場のフィードバックをもとに育てるアプローチです。
+    </p>
+
+    <!-- 1. 背景 -->
+    <h2>1. 背景：なぜ中小製造業はDXが進まないのか</h2>
+    <p>
+      大手製造業ではMES・ERP・PLMなどの統合システムが整備されていますが、中小ではそこまでの投資が難しいのが実情です。特に日本の中小企業は下請け比率が高く、受注量や製品仕様の変化が外部要因で起こるため、「要件が長期間安定していることを前提にしたシステム開発」と相性がよくありません。
+    </p>
+    <p>よく見られる課題は次のとおりです。</p>
+    <ul>
+      <li>現場の可視化ができておらず、経営者の意思決定が遅れる</li>
+      <li>検査・記録が紙やExcelに分散しており、データがつながらない</li>
+      <li>発注変動に現場が追随しているが、その状況が経営側に伝わらない</li>
+      <li>「本格的に導入するまでに1年かかる」システムはそもそも選びにくい</li>
+    </ul>
+    <p>
+      つまり、必要なのは「全部を一気に置き換える基幹システム」ではなく、<strong>現場のボトルネックを小さく解消しながら、後から拡張していける実装方法</strong>です。
+    </p>
+
+    <!-- 2. Lean Integrationの位置づけ -->
+    <h2>2. Lean Integrationの位置づけ</h2>
+    <p>
+      Lean Integrationは、フルスクラッチの基幹システム開発と、単発のPoCの中間に位置するアプローチです。PoCのスピード感と、業務システムとしての継続性・拡張性を両立させることを狙いとしています。
+    </p>
+    <div class="table-like">
+      <div class="table-like-row">
+        <div class="table-like-head">従来型</div>
+        <div class="table-like-body">要件を固めてから一括開発。完成度は高いが、変化への追随が遅く初期投資が大きい。</div>
+      </div>
+      <div class="table-like-row">
+        <div class="table-like-head">PoC型</div>
+        <div class="table-like-body">小さく試せるが、業務に載せるには作り直しが必要になりがち。</div>
+      </div>
+      <div class="table-like-row">
+        <div class="table-like-head">Lean Integration</div>
+        <div class="table-like-body"><strong>最初から「業務で使う前提」で小さく作る</strong>。現場の声を早期に取り込み、後からAPIやDBを増築する。</div>
+      </div>
+    </div>
+
+    <!-- 3. コンセプト -->
+    <h2>3. Lean Integrationの基本コンセプト</h2>
+    <p>このアプローチは3つの考えに基づいています。</p>
+    <h3>3-1. UIファースト</h3>
+    <p>
+      現場がタッチするのはUIです。現場が「使いづらい」「入力したくない」と感じた瞬間にデータは集まりません。そこでFlutterFlowなどのノーコードを使い、<strong>最初の1〜2週間で現場が触れる画面</strong>を用意します。これにより「現場の納得」を先に得ます。
+    </p>
+
+    <h3>3-2. 必要最小限のバックエンド</h3>
+    <p>
+      UIを支えるだけのAPIとDBだけをDjangoで短期間に作ります。Djangoは管理画面も自動生成できるため、マスタの初期登録やデータ確認をバックエンド側で簡単に行え、現場の手戻りを減らせます。
+    </p>
+
+    <h3>3-3. 可視化からAIへ段階的に進む</h3>
+    <p>
+      まずはGrafanaで「経営者・管理者が見たい数字」を日次/リアルタイムで出します。一定期間データがたまった段階で、歩留まり分析・異常検知・予測といったAI処理を追加していきます。最初からAIを入れないのは、データ品質が揃っていない段階でのAIは運用負荷が高くなるためです。
+    </p>
+
+    <!-- 4. 技術構成 -->
+    <h2>4. 技術構成（AIBODベースシステム）</h2>
+    <p>Lean Integrationを実現するために、AIBODでは次のような構成を推奨しています。</p>
+    <div class="two-col">
+      <div>
+        <h3>UIレイヤ</h3>
+        <ul>
+          <li><strong>FlutterFlow：</strong> 現場の入力・確認アプリをノーコードで作成</li>
+          <li><strong>Grafana：</strong> 経営者・管理者向けダッシュボード</li>
+        </ul>
+      </div>
+      <div>
+        <h3>アプリケーションレイヤ</h3>
+        <ul>
+          <li><strong>Django (Python)：</strong> REST API・DBアクセス・簡単なスレッド処理を実装</li>
+          <li>認証やロール管理もDjango側でまとめて面倒を見る</li>
+        </ul>
+      </div>
+    </div>
+    <div class="two-col">
+      <div>
+        <h3>データレイヤ</h3>
+        <ul>
+          <li>MySQL / PostgreSQL</li>
+          <li>既存の製造データベースへの読み取り専用接続</li>
+        </ul>
+      </div>
+      <div>
+        <h3>インフラ</h3>
+        <ul>
+          <li>工場内MiniPCにオンプレ配置</li>
+          <li>またはAWS/GCPでの軽量ホスティング</li>
+          <li>VPNやSSHトンネルでの安全なリモート保守</li>
+        </ul>
+      </div>
+    </div>
+    <p class="box">
+      👉 ポイントは、「最初から全部クラウド/SaaSに寄せる」のではなく、<strong>現場が扱いやすいところに最初の一式を置く</strong>ことです。これによりネットワーク制約のある製造現場でも導入しやすくなります。
+    </p>
+
+    <!-- 5. 導入パターン -->
+    <h2>5. 導入パターン</h2>
+    <h3>5-1. データがすでにある工場の場合</h3>
+    <p>
+      既存の検査DB・生産実績DBからAPIまたは直接接続でデータを取得し、Grafanaでダッシュボード化します。並行して現場が使う簡易アプリ（不良の理由入力、段取り変更の記録など）をFlutterFlowで作成します。
+    </p>
+
+    <h3>5-2. データがほとんどない場合</h3>
+    <p>
+      まずは「入力口」を用意するところから始めます。検査結果・不良内容・作業開始/終了などをモバイルやタブレットから登録できるようにし、1〜2か月で最低限のデータがたまるようにします。そのデータをGrafanaに流し込み、経営者が「現場で何が起きているか」を見られるようにします。
+    </p>
+
+    <h3>5-3. 多拠点・多ラインに横展開する場合</h3>
+    <p>
+      1ラインで作ったUI・API・ダッシュボードをテンプレート化しておき、拠点ごとにマスタだけ変えて配布する方式がとれます。Lean Integrationはこの「複数拠点にじわじわ広げる」展開とも相性が良いです。
+    </p>
+
+    <!-- 6. よくある質問 -->
+    <h2>6. よくある質問（FAQ）</h2>
+    <div class="faq">
+      <p><q>Q. MESやERPを入れる予定があっても、このアプローチは無駄になりませんか？</q><br />
+      A. 無駄になりません。Lean IntegrationはUIとAPIをきれいに分けるので、後から基幹システムを入れてもUI側を流用できます。むしろ「今すぐ必要な画面」を先出ししておくことで、後続プロジェクトの要件が明確になります。</p>
+
+      <p><q>Q. ノーコードだと保守が心配です。</q><br />
+      A. FlutterFlow部分は「変更が多いところ」だけに使い、業務ロジックはDjango側に寄せる設計にしておくと、将来のリプレースが容易です。</p>
+
+      <p><q>Q. AIはいつ入れるのがいいですか？</q><br />
+      A. データの粒度と量が揃ってからの方が運用が楽です。先に可視化→欠損の洗い出し→AI、という順が現実的です。</p>
+    </div>
+
+    <!-- 7. まとめ -->
+    <h2>7. まとめとAIBODの支援範囲</h2>
+    <p>
+      Lean Integrationは「まず現場で動かす」ことを第一に置いたアプローチです。大がかりな投資をせずに、経営者が製造現場を把握し、現場がデータを残せるようになるところから始められます。
+    </p>
+    <p>AIBODは次のような範囲で支援できます：</p>
+    <ul>
+      <li>現場ヒアリングと「最初のUI」の特定</li>
+      <li>FlutterFlow・Grafana・Djangoの初期セットアップ</li>
+      <li>既存DBや設備からのデータ取り込みアダプタ開発</li>
+      <li>運用後の改善サイクルの設計、AI適用フェーズへの拡張</li>
+    </ul>
+    <p><strong>新しい技術を、使える技術に。</strong> これはAIBODのコアメッセージであり、本ホワイトペーパーの目的でもあります。</p>
+
+    <footer>
+      <p><strong>株式会社AIBOD</strong><br />
+        Email: customer@aibod.com<br />
+        Web: https://www.aibod.com<br />
+        ※本書の内容は予告なく変更になる場合があります。
+      </p>
+    </footer>
+  </div>
+</body>
+</html>
