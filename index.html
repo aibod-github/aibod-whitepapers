@@ -6,116 +6,230 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --blue: #0068b6;
-      --light-blue: #00b3ec;
-      --deep-blue: #1d2087;
-      --gray-bg: #f5f8fb;
+      --blue-light: #00b3ec;
+      --blue-mid: #0068b6;
+      --blue-deep: #1d2087;
       --text: #222;
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Meiryo", sans-serif;
       margin: 0;
-      background: var(--gray-bg);
       color: var(--text);
       line-height: 1.7;
+      background: linear-gradient(160deg, var(--blue-light) 0%, var(--blue-mid) 40%, var(--blue-deep) 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: 62px; /* navbar分 */
     }
+
+    /* --- Navbar --- */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 62px;
+      background: rgba(0, 50, 90, 0.55);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-box {
+      width: 34px;
+      height: 34px;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.78rem;
+      letter-spacing: -0.03em;
+    }
+    .nav-title {
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .nav-right a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 18px;
+      font-size: 0.9rem;
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
+    }
+    .nav-right a:hover {
+      opacity: 1;
+    }
+
     header {
-      background: var(--blue);
-      color: white;
-      padding: 40px 20px;
       text-align: center;
+      color: #fff;
+      padding: 46px 20px 30px;
     }
     header h1 {
+      font-size: 2.0rem;
       margin: 0;
-      font-size: 1.8rem;
-      letter-spacing: .05em;
+      letter-spacing: 0.05em;
     }
+    header p {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-top: 6px;
+    }
+
     .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 40px 20px;
       display: grid;
       gap: 40px;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 20px 80px;
     }
+
+    @media (min-width: 720px) {
+      .container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
     .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      padding: 30px 26px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      padding: 30px 26px 36px;
+      text-align: left;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform .25s ease, box-shadow .25s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(6px);
+      animation: fadeInUp 1s ease both;
     }
+
     .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
     }
+
     .card h2 {
-      margin: 0;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
+      margin: 0 0 8px;
     }
+
     .card p {
-      margin: 12px 0 20px;
+      margin: 12px 0 24px;
     }
+
+    .card img.hero {
+      width: 100%;
+      max-width: 340px;
+      border-radius: 12px;
+      margin: 10px 0 20px;
+    }
+
     .link-btn {
       align-self: flex-start;
-      background: var(--deep-blue);
+      background: var(--blue-deep);
       color: #fff;
-      padding: 10px 20px;
+      padding: 10px 22px;
       border-radius: 6px;
       text-decoration: none;
       font-weight: 600;
-      transition: background .2s ease;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      transition: background 0.25s ease;
     }
+
     .link-btn:hover {
-      background: var(--blue);
+      background: var(--blue-mid);
     }
+
     .fusion h2 span {
-      color: var(--blue);
+      color: var(--blue-light);
     }
+
     .lean h2 span {
-      color: var(--light-blue);
+      color: var(--blue-deep);
     }
+
     footer {
       text-align: center;
-      padding: 30px 10px 50px;
-      color: #666;
-      font-size: .9rem;
+      padding: 20px 10px 50px;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.9rem;
     }
-    img.hero {
-      width: 100%;
-      max-width: 320px;
-      border-radius: 10px;
-      margin: 10px 0 20px;
+
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
     }
-    @media (min-width: 700px) {
-      .container {
-        grid-template-columns: 1fr 1fr;
+
+    .card:nth-child(1) { animation-delay: 0.2s; }
+    .card:nth-child(2) { animation-delay: 0.4s; }
+
+    /* small screens */
+    @media (max-width: 540px) {
+      .nav-right {
+        display: none;
+      }
+      header {
+        padding-top: 34px;
       }
     }
   </style>
 </head>
 <body>
+
+  <!-- ナビゲーション -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="images/aibod-logo.svg" alt="AIBOD" style="height:128px;">
+      <div class="nav-title">AIBOD</div>
+    </div>
+    <div class="nav-right">
+      <a href="#">Home</a>
+      <a href="#aifusion">AI Fusion</a>
+      <a href="#leanintegration">Lean Integration</a>
+    </div>
+  </nav>
+
   <header>
     <h1>AIBODが掲げるコンセプト</h1>
     <p>新しい技術を、使える技術に。</p>
   </header>
 
   <main class="container">
-
-    <section class="card fusion">
+    <!-- AI Fusion -->
+    <section class="card fusion" id="aifusion">
       <h2><span>AI</span> Fusion</h2>
       <img src="dd6811ca-0cfc-44b3-9675-d0b8c3b91d44.png" alt="AI Fusion Concept" class="hero">
       <p>
         「使えるAIを組み合わせる設計コンセプト」。<br>
-        小さなAIを組み合わせて集積し、設計効率を高める新しい発想です。<br>
-        各領域で最適なAIを連携させ、ビジネス全体の付加価値を創出します。
+        小さなAIを組み合わせて集積し、設計効率を高める新しいアプローチです。<br>
+        各領域に最適なAIを融合（Fusion）し、現場にフィットするAI活用を実現します。
       </p>
-      <a href="aifusion/" class="link-btn">AI Fusion ホワイトペーパーへ →</a>
+      <a href="aifusion/aifusion.html" class="link-btn">AI Fusion ホワイトペーパーへ →</a>
     </section>
 
-    <section class="card lean">
+    <!-- Lean Integration -->
+    <section class="card lean" id="leanintegration">
       <h2><span>Lean</span> Integration</h2>
       <img src="https://aibod-github.github.io/aibod-whitepapers/images/lean_integration.png" alt="Lean Integration Concept" class="hero">
       <p>
@@ -125,12 +239,12 @@
       </p>
       <a href="leanintegration/li.html" class="link-btn">Lean Integration ホワイトペーパーへ →</a>
     </section>
-
   </main>
 
   <footer>
     <p>© 2025 AIBOD Inc. All Rights Reserved.</p>
   </footer>
+
 </body>
 </html>
 
