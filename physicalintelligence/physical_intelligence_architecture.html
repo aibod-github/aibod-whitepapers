@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Physical AI Architecture Whitepaper | AIBOD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="SVA / VLP / CIT / DIO による次世代フィジカルAI基盤のホワイトペーパー。生成AIとフィジカルレイヤーを統合するためのアーキテクチャを定義します。"
+  />
+  <style>
+    :root {
+      --aibod-cyan: #00b3ec;
+      --aibod-blue: #0068b6;
+      --aibod-navy: #1d2087;
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --text-main: #222222;
+      --text-muted: #666666;
+      --border-subtle: #e0e4f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top left, #e6f7ff 0, #f5f7fb 40%, #ffffff 100%);
+      color: var(--text-main);
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--aibod-blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      background: linear-gradient(
+        135deg,
+        var(--aibod-navy),
+        var(--aibod-blue),
+        var(--aibod-cyan)
+      );
+      color: #ffffff;
+      padding: 32px 16px 40px;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .hero-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin: 0 0 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      max-width: 680px;
+      margin: 0 0 20px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .hero-meta {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      margin-bottom: 10px;
+    }
+
+    .pill span {
+      opacity: 0.9;
+    }
+
+    nav {
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 8px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--aibod-navy);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.82rem;
+    }
+
+    .nav-links a {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      color: #333;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      border-color: var(--aibod-cyan);
+      background: rgba(0, 179, 236, 0.06);
+    }
+
+    main {
+      padding: 24px 0 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr);
+      gap: 24px;
+    }
+
+    @media (min-width: 960px) {
+      .grid {
+        grid-template-columns: minmax(0, 3fr) minmax(260px, 1fr);
+        align-items: flex-start;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px 22px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 30px rgba(10, 40, 120, 0.08);
+      margin-bottom: 18px;
+    }
+
+    .card h2,
+    .card h3,
+    .card h4 {
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      border-left: 4px solid var(--aibod-blue);
+      padding-left: 10px;
+      margin: 0 0 12px;
+    }
+
+    h3 {
+      font-size: 1.08rem;
+      margin: 16px 0 6px;
+      color: var(--aibod-navy);
+    }
+
+    h4 {
+      font-size: 0.98rem;
+      margin: 12px 0 4px;
+      color: var(--text-main);
+    }
+
+    p {
+      margin: 4px 0 10px;
+      font-size: 0.95rem;
+    }
+
+    ul,
+    ol {
+      margin: 4px 0 10px 18px;
+      padding-left: 0;
+      font-size: 0.94rem;
+    }
+
+    li + li {
+      margin-top: 2px;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 2px;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f1f5ff;
+      color: var(--aibod-navy);
+      border: 1px solid #d5def8;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 6px 0 10px;
+      font-size: 0.9rem;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--border-subtle);
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f5f7ff;
+      font-weight: 600;
+    }
+
+    code {
+      font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 0.82rem;
+      background: #f3f5fb;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--aibod-blue);
+      margin-bottom: 2px;
+    }
+
+    .side-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--aibod-navy);
+      margin-bottom: 6px;
+    }
+
+    .side-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 0.86rem;
+    }
+
+    .side-list li {
+      margin-bottom: 6px;
+    }
+
+    .side-list a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    .side-list a:hover {
+      color: var(--aibod-blue);
+      text-decoration: underline;
+    }
+
+    .kbd {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid #d0d4e0;
+      background: #f7f8fc;
+      font-size: 0.75rem;
+      font-family: inherit;
+    }
+
+    .callout {
+      border-left: 4px solid var(--aibod-cyan);
+      background: #f5fbff;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      margin: 8px 0 10px;
+    }
+
+    .mono-block {
+      background: #0f172a;
+      color: #e5e7eb;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 0.82rem;
+      overflow-x: auto;
+      margin: 6px 0 10px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 14px 16px 24px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: #ffffff;
+    }
+
+    .footer-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      background: #ffffff;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      color: var(--aibod-navy);
+      text-decoration: none;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
+      opacity: 0.96;
+    }
+
+    .back-to-top:hover {
+      background: #f5f7ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header id="top">
+    <div class="container">
+      <div class="pill">
+        <span>📘</span><span>AIBOD Physical AI Architecture</span>
+      </div>
+      <h1 class="hero-title">Physical AI Architecture Whitepaper</h1>
+      <p class="hero-subtitle">
+        SVA / VLP / CIT / DIO による次世代フィジカルAI基盤。生成AIの知性を、工場・エネルギー・ロボティクスなどの物理世界に投影するためのアーキテクチャを定義する。
+      </p>
+      <p class="hero-meta">Draft Ver.1 · AIBOD</p>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo">AIBOD Whitepapers</div>
+      <div class="nav-links">
+        <a href="#executive-summary">Executive Summary</a>
+        <a href="#background">背景</a>
+        <a href="#physical-ai">Physical AI</a>
+        <a href="#sva">SVA</a>
+        <a href="#vlp">VLP</a>
+        <a href="#cit">CIT</a>
+        <a href="#dio">DIO</a>
+        <a href="#architecture">全体像</a>
+        <a href="#usecases">ユースケース</a>
+        <a href="#conclusion">まとめ</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container grid">
+      <div>
+        <!-- 0. Executive Summary -->
+        <section id="executive-summary" class="card">
+          <div class="section-label">0. Executive Summary</div>
+          <h2>Executive Summary</h2>
+          <p>
+            生成AIはホワイトカラー業務の効率を劇的に向上させたが、その影響は「Virtual（情報）レイヤー」に偏っている。一方、工場・エネルギー・物流・ロボティクスなどの
+            <strong>Physical（物理）レイヤー</strong> には、レガシー設備・バラバラなインターフェース・IT/OTの断絶といった課題が残存している。
+          </p>
+          <p>
+            AIBOD は、このフィジカルレイヤーを AI と統合する新しい概念を
+            <strong>Physical AI</strong> と定義し、次の 4 つの構造で体系化する。
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>構造名</th>
+                <th>略称</th>
+                <th>役割</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Structured Vertical Architecture</td>
+                <td><strong>SVA</strong></td>
+                <td>クラウド〜チップの垂直統合アーキテクチャ</td>
+              </tr>
+              <tr>
+                <td>Variable Layer Partitioning</td>
+                <td><strong>VLP</strong></td>
+                <td>ソフト/ハード境界を可変とする設計思想</td>
+              </tr>
+              <tr>
+                <td>Configurable Interface Translator</td>
+                <td><strong>CIT</strong></td>
+                <td>FPGA によるインターフェース変換・接続の民主化</td>
+              </tr>
+              <tr>
+                <td>Distributed Intelligence Orchestrator</td>
+                <td><strong>DIO</strong></td>
+                <td>分散デバイス群の知的オーケストレーション</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            これら 4 構造により、Virtual AI の知性が
+            <strong>実世界の行動へと翻訳される次世代サイバー・フィジカル基盤</strong>
+            が形成される。
+          </p>
+        </section>
+
+        <!-- 1. 背景 -->
+        <section id="background" class="card">
+          <div class="section-label">1. Background</div>
+          <h2>背景：生成AIだけでは突破できない“最後の壁”</h2>
+          <p>
+            生成AIは、テキスト生成・コード生成・分析・意思決定支援の領域を大きく変革した。しかし現場には、次のような課題が残されている。
+          </p>
+
+          <h3>レガシー設備の混在</h3>
+          <ul>
+            <li>メーカーごとに独自プロトコル／規格が存在</li>
+            <li>旧式PLCや機械設備が更新されずに残る</li>
+            <li>新旧機器をつなぐインターフェースがボトルネックになる</li>
+          </ul>
+
+          <h3>IT と OT の断絶</h3>
+          <ul>
+            <li>クラウドと工場設備が直接つながらない</li>
+            <li>IT設計者と現場技術者が別の前提・言語・ツールを使っている</li>
+            <li>要件や制約がエンドツーエンドで共有されない</li>
+          </ul>
+
+          <h3>エンドツーエンド設計の欠落</h3>
+          <ul>
+            <li>クラウド、エッジ、デバイス、基板、チップが別々に設計される</li>
+            <li>全体アーキテクチャがなく、部分最適に留まりがち</li>
+          </ul>
+
+          <div class="callout">
+            <strong>結論：</strong>生成AIの次のフロンティアは「物理世界の再構築」、すなわち
+            <strong>Physical AI</strong> である。
+          </div>
+        </section>
+
+        <!-- 2. Physical AI とは -->
+        <section id="physical-ai" class="card">
+          <div class="section-label">2. Physical AI</div>
+          <h2>Physical AI とは何か</h2>
+          <p>
+            Physical AI は、生成AIの知性（Virtual）を
+            <strong>現実世界で実行可能な行動（Physical）へ翻訳する統合技術体系</strong>
+            である。
+          </p>
+          <p>
+            ロボット、蓄電池、再エネ設備、AGV、各種センサー／アクチュエータなどが、
+            <strong>「意図を持って協調する存在」</strong> として振る舞うための基盤が Physical AI である。
+          </p>
+
+          <h3>Physical AI を構成する 4 つの構造</h3>
+          <ul>
+            <li><strong>SVA（Structured Vertical Architecture）：</strong> 垂直統合の構造</li>
+            <li><strong>VLP（Variable Layer Partitioning）：</strong> 境界の柔軟性</li>
+            <li><strong>CIT（Configurable Interface Translator）：</strong> 接続の民主化</li>
+            <li><strong>DIO（Distributed Intelligence Orchestrator）：</strong> 統合知性</li>
+          </ul>
+        </section>
+
+        <!-- 3. SVA -->
+        <section id="sva" class="card">
+          <div class="section-label">3. SVA</div>
+          <h2>SVA（Structured Vertical Architecture）</h2>
+
+          <h3>定義</h3>
+          <p>
+            クラウド、アプリケーション、人間インターフェース、ミドルウェア、デバイス、電子基板、チップに至るまで、
+            <strong>垂直方向を一貫構造として設計するアーキテクチャ</strong>。
+          </p>
+
+          <h3>解決する課題</h3>
+          <ul>
+            <li>クラウド側と現場側が別々に設計される</li>
+            <li>安全要件・レイテンシ要件が途中で抜け落ちる</li>
+            <li>エンドツーエンドで最適化されない</li>
+          </ul>
+
+          <h3>特徴</h3>
+          <ul>
+            <li>要件がクラウド〜基板〜チップまで貫通する</li>
+            <li>生成AIが SVA ドキュメントを理解し、設計・実装・テストを支援</li>
+            <li>アプリケーションと現場設備の「意図」が整合する</li>
+          </ul>
+
+          <h3>例：工場ラインにおける SVA</h3>
+          <ul>
+            <li>クラウド：ダッシュボード、分析、需要予測モデル</li>
+            <li>エッジ：AGV制御ロジック、カメラ推論</li>
+            <li>デバイス：PLC、モータードライブ</li>
+            <li>基板：I/O基板、センサーフロントエンド</li>
+            <li>チップ：モーター制御IC、保護回路、PWM生成ブロック</li>
+          </ul>
+        </section>
+
+        <!-- 4. VLP -->
+        <section id="vlp" class="card">
+          <div class="section-label">4. VLP</div>
+          <h2>VLP（Variable Layer Partitioning）</h2>
+
+          <h3>定義</h3>
+          <p>
+            ソフトウェアとハードウェア、クラウドとエッジ、MCU と FPGA の間など、
+            <strong>レイヤー間の境界位置を可変（Variable）として扱えるようにする設計思想</strong>。
+          </p>
+
+          <h3>背景</h3>
+          <ul>
+            <li>従来は初期設計段階で境界を固定することが多かった</li>
+            <li>一度決めた後、性能要件が変わっても柔軟に変えられない</li>
+            <li>エッジAIや新デバイスの進化を活かしきれない</li>
+          </ul>
+
+          <h3>VLP が可能にすること</h3>
+          <ul>
+            <li>ある機能を、クラウドからエッジに、エッジからFPGAに移動する試行錯誤</li>
+            <li>消費電力やレイテンシの変化を見ながら最適境界を探索</li>
+            <li>生成AIを活用して、配置パターンごとにコードや回路の草案を自動生成</li>
+          </ul>
+
+          <h3>イメージ例</h3>
+          <p>同一の SVA 上で、以下のようなバリエーションを検討可能になる。</p>
+          <ul>
+            <li>バージョンA：推論はクラウド、制御はMCU</li>
+            <li>バージョンB：推論をエッジ NPU 搭載ボードに移す</li>
+            <li>バージョンC：安全制御ロジックだけFPGAにオフロード</li>
+          </ul>
+        </section>
+
+        <!-- 5. CIT -->
+        <section id="cit" class="card">
+          <div class="section-label">5. CIT</div>
+          <h2>CIT（Configurable Interface Translator）</h2>
+
+          <h3>定義</h3>
+          <p>
+            FPGA 搭載の小型基板などを用い、
+            <strong>ヘテロなインターフェース同士を短期間でつなぐための可変インターフェース変換器</strong>。
+          </p>
+
+          <h3>従来の課題</h3>
+          <ul>
+            <li>インターフェースの標準化が進まないと、機器が普及しにくい</li>
+            <li>レガシー設備が独自プロトコルを持ち、新システムとの統合コストが高い</li>
+            <li>「接続」だけでプロジェクトの多くのリソースが消費される</li>
+          </ul>
+
+          <h3>CIT のアプローチ</h3>
+          <ul>
+            <li>FPGA を搭載した汎用ボードを「変換プラットフォーム」として用意</li>
+            <li>生成AIがプロトコル解析・HDLコード生成・テストベクタ生成を支援</li>
+            <li>現場ごとのニーズに応じたインターフェース変換器を短期間で構築</li>
+          </ul>
+
+          <h3>例</h3>
+          <ul>
+            <li>旧式RS-485機器 ↔ 新規Ethernetベース制御ネットワーク</li>
+            <li>独自拡張CAN ↔ 標準CANopen / J1939</li>
+            <li>独自パルス信号 ↔ 標準PWM / GPIO インターフェース</li>
+            <li>STDF / WAT フォーマット ↔ 統一センサデータモデル</li>
+          </ul>
+
+          <div class="callout">
+            <strong>ポイント：</strong>CIT により、「標準ではないから統合不能」という状況を減らし、現場のレガシー資産を活かしながら Physical AI を展開できる。
+          </div>
+        </section>
+
+        <!-- 6. DIO -->
+        <section id="dio" class="card">
+          <div class="section-label">6. DIO</div>
+          <h2>DIO（Distributed Intelligence Orchestrator）</h2>
+          <p>
+            <strong>DIO = Distributed + Intelligence + Orchestrator</strong>。
+            DIO は、分散した物理デバイス・エネルギー装置・ロボット・搬送機器などを
+            <strong>知性的に協調制御するオーケストレーションレイヤー</strong> である。
+          </p>
+
+          <h3>1）マルチデバイス状態の集約</h3>
+          <ul>
+            <li>蓄電池 SoC（State of Charge）</li>
+            <li>再エネ発電量・予測</li>
+            <li>AGV の位置情報・残バッテリー</li>
+            <li>設備の稼働状況・アラーム情報</li>
+            <li>環境データ（温度・湿度・気圧など）</li>
+          </ul>
+
+          <h3>2）予測モデル・最適化モデルとの連携</h3>
+          <ul>
+            <li>電力需要予測モデル</li>
+            <li>故障予測モデル</li>
+            <li>コスト最適化モデル</li>
+            <li>品質・生産性最適化モデル</li>
+          </ul>
+
+          <h3>3）Action Policy（行動方針）の生成</h3>
+          <ul>
+            <li>蓄電池の充放電スケジュール</li>
+            <li>AGV群のルーティングとタスク割り当て</li>
+            <li>自動倉庫の入出庫シーケンス</li>
+            <li>設備オン／オフ・負荷シフト</li>
+          </ul>
+
+          <h3>4）群制御・安全制御</h3>
+          <ul>
+            <li>ロボットフリートの渋滞回避・協調制御</li>
+            <li>マイクログリッド全体の安定運転</li>
+            <li>安全閾値を踏まえた制御制約の管理</li>
+          </ul>
+
+          <div class="callout">
+            <strong>位置付け：</strong>DIO は、Physical AI における「中枢神経」であり、Virtual AI
+            の知性を、実世界での具体的な行動に変換する役割を担う。
+          </div>
+        </section>
+
+        <!-- 7. 全体像 -->
+        <section id="architecture" class="card">
+          <div class="section-label">7. Architecture</div>
+          <h2>Physical AI Architecture の全体像</h2>
+          <p>Physical AI Architecture の概念構造は次のように整理できる。</p>
+
+          <div class="mono-block">
+Virtual AI（生成AI・予測・最適化）
+                ↓
+DIO（Distributed Intelligence Orchestrator）
+                ↓
+VLP（クラウド ⇆ エッジ ⇆ FPGA の境界最適化）
+                ↓
+CIT（FPGA によるインターフェース変換）
+                ↓
+Physical Layer（ロボット / 蓄電池 / 設備 / センサー）
+          </div>
+
+          <p>
+            SVA は、これら全体を一貫する垂直アーキテクチャとして機能する。VLP により境界位置を柔軟に変え、CIT によりレガシー設備を含む全ての機器を接続し、DIO がそれらを知的にオーケストレーションする構造である。
+          </p>
+
+          <div class="callout">
+            <strong>まとめ：</strong>Physical AI は、「現場を賢く動かすための
+            <strong>脳と神経網</strong>」として位置付けられる。
+          </div>
+        </section>
+
+        <!-- 8. ユースケース -->
+        <section id="usecases" class="card">
+          <div class="section-label">8. Use Cases</div>
+          <h2>代表的ユースケース</h2>
+
+          <h3>1）マイクログリッド最適化</h3>
+          <ul>
+            <li><strong>SVA：</strong> 発電・蓄電・負荷を統合した電力アーキテクチャ設計</li>
+            <li><strong>VLP：</strong> 予測モデル・制御ロジックの配置（クラウド／エッジ）の最適化</li>
+            <li><strong>CIT：</strong> メーカーの異なるPCSや蓄電池を共通制御バスに接続</li>
+            <li><strong>DIO：</strong> 需給バランス、コスト最適、CO₂削減を考慮した充放電計画</li>
+          </ul>
+
+          <h3>2）Factory Autonomous Line（自律生産ライン）</h3>
+          <ul>
+            <li>AGV、自動倉庫、PLC、検査装置などを SVA で一体設計</li>
+            <li>VLP によって、AI推論位置をクラウドとエッジの間で動的最適化</li>
+            <li>CIT を用いてレガシーPLCを最新ラインに組み込む</li>
+            <li>DIO が搬送・生産スケジュール・エネルギー利用をまとめて最適化</li>
+          </ul>
+
+          <h3>3）サービスロボット フリート制御</h3>
+          <ul>
+            <li>複数の清掃ロボ・搬送ロボ・案内ロボを DIO が群制御</li>
+            <li>ビル側設備（エレベータ・自動ドアなど）との接続を CIT で吸収</li>
+            <li>VLP により動画解析の一部をクラウドからエッジへ移すなど柔軟に調整</li>
+          </ul>
+        </section>
+
+        <!-- 9. まとめ -->
+        <section id="conclusion" class="card">
+          <div class="section-label">9. Conclusion</div>
+          <h2>まとめ：Physical AI が拓く未来</h2>
+          <p>
+            Physical AI は、生成AIの知性を
+            <strong>「現実の行動」に転写する</strong> 技術体系である。
+          </p>
+          <p>これにより、次のような価値が実現される。</p>
+          <ul>
+            <li>レガシー資産を活かしつつ、段階的な高度化が可能</li>
+            <li>現場のあらゆるデバイスが「協調して動くシステム」へ進化</li>
+            <li>IT と OT を跨いだ垂直統合が現実的なコストで実現</li>
+            <li>自律的なサイバー・フィジカルシステムの構築が可能</li>
+          </ul>
+          <p>
+            AIBOD が定義する
+            <strong>SVA / VLP / CIT / DIO</strong>
+            は、こうした未来を実現するための、次世代産業向けアーキテクチャの中核コンセプトである。
+          </p>
+        </section>
+
+        <!-- 10. 次のステップ -->
+        <section id="next-steps" class="card">
+          <div class="section-label">10. Next Steps</div>
+          <h2>次のステップ（今後の発展案）</h2>
+          <p>
+            本ホワイトペーパーをベースに、以下のような展開が考えられる。
+          </p>
+          <ul>
+            <li>各構造（SVA / VLP / CIT / DIO）個別の詳細ホワイトペーパー</li>
+            <li>産業別（半導体、エネルギー、物流、建設など）ユースケース集</li>
+            <li>AIBOD Factory でのプロダクトラインとの対応付け</li>
+            <li>新職種「Physical AI Architect / DIO Engineer」像の定義</li>
+          </ul>
+          <p class="muted">
+            実案件やPoCに適用する際には、対象業界・システム規模・既存資産などに応じて、SVA のテンプレート化や DIO の設計パターンライブラリ化を進めていくことが有効である。
+          </p>
+        </section>
+      </div>
+
+      <!-- Side column -->
+      <aside>
+        <div class="card">
+          <div class="side-card-title">このホワイトペーパーのキーワード</div>
+          <div class="tag-row">
+            <span class="tag">Physical AI</span>
+            <span class="tag">SVA</span>
+            <span class="tag">VLP</span>
+            <span class="tag">CIT</span>
+            <span class="tag">DIO</span>
+            <span class="tag">Cyber-Physical</span>
+            <span class="tag">Edge / Cloud</span>
+            <span class="tag">FPGA</span>
+            <span class="tag">Microgrid</span>
+            <span class="tag">Factory</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="side-card-title">セクション一覧</div>
+          <ul class="side-list">
+            <li><a href="#executive-summary">0. Executive Summary</a></li>
+            <li><a href="#background">1. 背景</a></li>
+            <li><a href="#physical-ai">2. Physical AI とは</a></li>
+            <li><a href="#sva">3. SVA</a></li>
+            <li><a href="#vlp">4. VLP</a></li>
+            <li><a href="#cit">5. CIT</a></li>
+            <li><a href="#dio">6. DIO</a></li>
+            <li><a href="#architecture">7. 全体像</a></li>
+            <li><a href="#usecases">8. ユースケース</a></li>
+            <li><a href="#conclusion">9. まとめ</a></li>
+            <li><a href="#next-steps">10. 次のステップ</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="side-card-title">利用メモ（編集用ガイド）</div>
+          <p class="muted">
+            このHTMLは単独ページとしても、既存の AIBOD Whitepapers / AIBOD Factory サイトの child ページとしても利用できます。
+          </p>
+          <ul class="side-list muted">
+            <li>・ファイル名例：<code>physical_ai_architecture.html</code></li>
+            <li>・GitHub Pages では <span class="kbd">index.html</span> 配下に配置</li>
+            <li>・NavBar のロゴ部分から親ページへリンク可能</li>
+            <li>・セクションIDで他ページからアンカーリンク可能</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+    <a href="#top" class="back-to-top">↑ Top</a>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© AIBOD. Physical AI Architecture Whitepaper Draft Ver.1</div>
+      <div>Concepts: SVA / VLP / CIT / DIO</div>
+    </div>
+  </footer>
+</body>
+</html>
+
