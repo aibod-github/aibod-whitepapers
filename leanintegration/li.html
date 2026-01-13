@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <title>Lean Integration | AIBOD ホワイトペーパー</title>
+  <title>Lean Prototyping Loop (LPL) | AIBOD ホワイトペーパー</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
@@ -105,9 +105,32 @@
     p {
       margin-bottom: 1em;
     }
-    ul {
+    ul, ol {
       margin-bottom: 1em;
       padding-left: 1.4em;
+    }
+
+    .callout {
+      background: #f2f7ff;
+      border: 1px solid rgba(42,96,255,0.25);
+      border-left: 6px solid var(--blue-mid);
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin: 16px 0 22px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: #fff;
+      background: var(--blue-deep);
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .mini {
+      font-size: 0.95rem;
+      color: #444;
     }
 
     footer {
@@ -135,73 +158,144 @@
       <a href="../">Home</a>
       <a href="../aifusion/">AI Fusion</a>
       <a href="../leanintegration/">Lean Integration</a>
+      <a href="../lpl/">LPL</a>
     </div>
   </nav>
 
   <header>
-    <h1>Lean Integration</h1>
-    <p>中小製造業のための「小さく産んで大きく育てる」デジタル変革戦略</p>
+    <h1>Lean Prototyping Loop（LPL）</h1>
+    <p>“開発”を飛び越えて、まず実装して現場で育てる — 生成AI時代の新しいSIモデル</p>
   </header>
 
   <main>
-    <h2>1️⃣ はじめに：中小ものづくり企業を取り巻く現実</h2>
+    <h2>1️⃣ はじめに：生成AI時代に「開発」の前提が変わった</h2>
     <p>
-      近年、ものづくり現場ではデジタル化・AI・自動化の波が急速に押し寄せています。  
-      しかし、多くの中小製造業は「高額なシステム導入」や「現場との乖離」が課題となり、DXの第一歩を踏み出せずにいます。
+      生成AIの進化により、UI・API・データモデル・テストコードまで、短期間で実装できる時代になりました。
+      その一方で、現場のDXでは「要件が最初から固まらない」という現実が残り続けています。
+    </p>
+    <p>
+      AIBODは、これまで<strong>Lean Integration</strong>を通じて、
+      “小さく作り小さく使う”ことで導入ハードルを下げ、現場で育てるDXを支援してきました。
+      本ホワイトペーパーでは、そのLean Integrationを<strong>生成AI時代の究極アジャイル</strong>として再定義し、
+      <strong>Lean Prototyping Loop（LPL）</strong>として提示します。
     </p>
 
-    <h2>2️⃣ 課題の本質：大規模開発のリスクと現場乖離</h2>
-    <p>
-      従来のシステム導入は、要件定義から運用開始まで長期化する傾向があります。  
-      この間に市場や現場が変化し、完成した頃には「使えないシステム」となることも少なくありません。
-    </p>
+    <div class="callout">
+      <span class="badge">結論</span>
+      <strong>LPLは「要件定義→開発」ではなく「実装→現場利用→要件が生まれる→改善」を前提にした方法です。</strong>
+      <div class="mini">現場が“触れる”ことで、曖昧な要望が具体的要求に変わります。</div>
+    </div>
 
-    <h2>3️⃣ Lean Integrationとは</h2>
+    <h2>2️⃣ 課題の本質：要件は最初から言語化できない</h2>
     <p>
-      AIBODが提唱するLean Integrationは、  
-      <strong>「小さく産んで大きく育てる」</strong>アプローチによって、  
-      現場の課題解決から始める実践的なDX手法です。
+      従来のSIでは、プロジェクト開始時点で要件を固めることが求められます。
+      しかし実際には、現場は<strong>見たことのない仕組みを正確に言語化できません</strong>。
+      結果として、要件定義が長期化し、開発が遅れ、リリース時には現場と乖離するリスクが高まります。
     </p>
     <ul>
-      <li>最小限の範囲から実装し、現場でのフィードバックを反映</li>
-      <li>ノーコード＋軽量バックエンドで短期導入</li>
-      <li>変化に強く、拡張可能なシステム設計</li>
+      <li>要件が曖昧なまま、ドキュメントだけが増える</li>
+      <li>開発中に現場や運用が変わり、完成品が合わない</li>
+      <li>“正しさ”を確かめるのが最終盤になり、手戻りが大きい</li>
+    </ul>
+
+    <h2>3️⃣ LPL（Lean Prototyping Loop）とは</h2>
+    <p>
+      LPLは、Lean Integrationのデプロイ（実行）モデルです。
+      <strong>“まず動くプロトを現場に入れ、使いながら要件を確定し、そのまま本運用へ育てる”</strong>ことを目的にします。
+    </p>
+
+    <h3>✅ LPLの基本フロー</h3>
+    <ol>
+      <li><strong>ふわっとした課題</strong>を受け取る（困りごと／違和感レベルでOK）</li>
+      <li><strong>リーンにプロト設計</strong>（AIBOD知見で“本質の芯”を抜き出す）</li>
+      <li><strong>爆速でプロト構築</strong>（生成AI＋テンプレ＋既存部品で即実装）</li>
+      <li><strong>現場で使う</strong>（PoCではなく、実運用に近い使い方）</li>
+      <li><strong>要件が生まれる</strong>（触ることで、要求が具体化）</li>
+      <li><strong>プロト修正</strong>（短サイクルで改善）</li>
+      <li><strong>ループ</strong>（改善しながら“ほぼ運用モード”で回す）</li>
+      <li><strong>成熟点で本運用</strong>（いつの間にか本番品質に到達）</li>
+    </ol>
+
+    <h3>✅ LPLが目指すアジャイル像</h3>
+    <ul>
+      <li><strong>開発を短くする</strong>のではなく、<strong>開発という概念を薄くする</strong></li>
+      <li>仕様を固めるより、<strong>触れて確かめる</strong></li>
+      <li>議論より、<strong>実装して現場で学ぶ</strong></li>
     </ul>
 
     <h2>4️⃣ 技術構成（AIBODベースシステム）</h2>
+    <p>
+      LPLは「最初から完璧」を狙いません。<br>
+      そのため、<strong>最小の構成で“動く価値”を作り、必要に応じて拡張</strong>します。
+    </p>
+
     <h3>UIレイヤ</h3>
-    <p><strong>FlutterFlow</strong>を用いて現場向けアプリを迅速に構築し、<strong>Grafana</strong>で経営者向け可視化ダッシュボードを実現します。</p>
+    <p>
+      <strong>FlutterFlow</strong>で現場向けアプリを迅速に構築し、
+      <strong>Grafana</strong>で経営者向けの可視化（KPI/トレンド）を提供します。
+    </p>
 
     <h3>バックエンド</h3>
-    <p><strong>Django（Python）</strong>を採用。API開発、DBアクセス、スレッド処理などを短期間で構築でき、UI中心の設計に最適です。</p>
+    <p>
+      <strong>Django（Python）</strong>を採用。
+      API、DB、バッチ、権限、運用機能を短期間で整備しやすく、LPLの短サイクルに適合します。
+    </p>
 
     <h3>データレイヤ</h3>
-    <p><strong>MySQL / PostgreSQL</strong>を使用し、既存DBとの連携やローカル保存にも柔軟に対応します。</p>
+    <p>
+      <strong>MySQL / PostgreSQL</strong>を中心に、既存DB連携やローカル保存にも柔軟に対応。
+      最初は小さく（テーブル数最小）から始め、運用に合わせて成長させます。
+    </p>
 
     <h3>実行環境</h3>
     <p>
-      工場内MiniPCやクラウド（AWS, GCP）など、現場のネットワーク環境に応じて選択可能です。
+      工場内MiniPCやクラウド（AWS, GCP）など、ネットワーク事情や現場制約に応じて選択可能です。
     </p>
 
-    <h2>5️⃣ 導入ステップ</h2>
-    <ol>
-      <li>UIファーストで最小限のPoCを実施（1〜2週間）</li>
-      <li>現場のフィードバックで改善を重ねる</li>
-      <li>データ活用・AI自動化へ段階的に拡張</li>
-    </ol>
+    <h2>5️⃣ AIBOD Factoryとの関係：プロトを“資産化”して製造する</h2>
+    <p>
+      LPLの特徴は、プロトが単なるPoCで終わらない点です。
+      顧客課題から生まれたプロトは、<strong>AIBODの所有資産</strong>として
+      <strong>AIBOD Factory（Your Software, Manufactured）</strong>に登録され、製造可能な形へ整備されます。
+    </p>
 
-    <h2>6️⃣ 導入効果</h2>
+    <h3>✅ 2つのデプロイパス</h3>
     <ul>
-      <li>現場と経営の情報ギャップを解消</li>
-      <li>データドリブンな改善文化の定着</li>
-      <li>AI導入のための基盤が自然に整う</li>
-      <li>短期間・低コストでDXが実現可能</li>
+      <li><strong>汎用化してFactoryプロダクトへ</strong>：同様の課題を持つ他社へ“量産”</li>
+      <li><strong>顧客専用として提供</strong>：その顧客向けに最適化・契約</li>
     </ul>
 
-    <h2>7️⃣ まとめ</h2>
+    <div class="callout">
+      <span class="badge">ポイント</span>
+      LPLは<strong>「現場で学ぶループ」</strong>、AIBOD Factoryは<strong>「製造して展開する仕組み」</strong>。<br>
+      両者が表裏一体になることで、<strong>“速いSI”と“資産化”を同時に実現</strong>します。
+    </div>
+
+    <h2>6️⃣ 導入ステップ（LPL実行モデル）</h2>
+    <ol>
+      <li><strong>0〜数日：</strong>課題ヒアリング → リーン設計 → プロトの骨格を確定</li>
+      <li><strong>数日〜2週間：</strong>爆速プロト実装 → 現場投入（運用に近い形で開始）</li>
+      <li><strong>運用しながら：</strong>LPLループ（改善・拡張・データ整備）</li>
+      <li><strong>成熟点：</strong>本運用へ（プロトがそのまま本番になる）</li>
+    </ol>
+
+    <h2>7️⃣ 導入効果</h2>
+    <ul>
+      <li><strong>要件定義の短縮</strong>：触って決めるため、議論が減る</li>
+      <li><strong>現場適合の向上</strong>：使いながら改善するので乖離しにくい</li>
+      <li><strong>スピード</strong>：最短で価値提供（まず動く）</li>
+      <li><strong>低リスク</strong>：小さく始め、必要に応じて拡張</li>
+      <li><strong>資産化</strong>：プロトがFactoryに登録され、再利用・量産が可能</li>
+    </ul>
+
+    <h2>8️⃣ まとめ：LPLは生成AI時代の新しいSIモデル</h2>
     <p>
-      Lean Integrationは、中小製造業が「まず動かす」「使いながら育てる」「AI化する」プロセスを支援するAIBOD独自のフレームワークです。  
-      現場と経営をつなぎ、小さな成功体験を積み重ねながら変化に強いものづくりを実現します。
+      LPLは、生成AIによる“爆速実装”を前提に、現場の曖昧さを肯定しながら、
+      <strong>実装→現場利用→要件生成→改善</strong>を高速で回す方法です。
+    </p>
+    <p>
+      そしてAIBOD Factoryと統合することで、
+      その場限りの受託ではなく、<strong>プロトを資産化し、製造して展開できる</strong>SIモデルへ進化します。
     </p>
 
     <h2>📞 お問い合わせ</h2>
@@ -217,4 +311,3 @@
   </footer>
 </body>
 </html>
-

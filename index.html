@@ -4,257 +4,7 @@
   <meta charset="utf-8">
   <title>AIBOD Concepts｜AI Fusion & Lean Integration</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root {
-      --blue-light: #00b3ec;
-      --blue-mid: #0068b6;
-      --blue-deep: #1d2087;
-      --text: #222;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Meiryo", sans-serif;
-      margin: 0;
-      color: var(--text);
-      line-height: 1.7;
-      background: linear-gradient(160deg, var(--blue-light) 0%, var(--blue-mid) 40%, var(--blue-deep) 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding-top: 62px; /* navbar分 */
-    }
-
-    /* --- Navbar --- */
-    .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 62px;
-      background: rgba(0, 50, 90, 0.55);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      z-index: 100;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo-box {
-      width: 34px;
-      height: 34px;
-      border: 2px solid #fff;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: #fff;
-      font-size: 0.78rem;
-      letter-spacing: -0.03em;
-    }
-    .nav-title {
-      color: #fff;
-      font-weight: 600;
-      letter-spacing: .02em;
-    }
-    .nav-right a {
-      color: #fff;
-      text-decoration: none;
-      margin-left: 18px;
-      font-size: 0.9rem;
-      opacity: 0.9;
-      transition: opacity 0.2s ease;
-    }
-    .nav-right a:hover {
-      opacity: 1;
-    }
-
-    header {
-      text-align: center;
-      color: #fff;
-      padding: 46px 20px 30px;
-    }
-    header h1 {
-      font-size: 2.0rem;
-      margin: 0;
-      letter-spacing: 0.05em;
-    }
-    header p {
-      font-size: 1rem;
-      opacity: 0.9;
-      margin-top: 6px;
-    }
-
-    .container {
-      display: grid;
-      gap: 40px;
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 20px 20px 80px;
-    }
-
-    @media (min-width: 720px) {
-      .container {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      padding: 30px 26px 36px;
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      backdrop-filter: blur(6px);
-      animation: fadeInUp 1s ease both;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
-    }
-
-    .card h2 {
-      font-size: 1.8rem;
-      margin: 0 0 8px;
-    }
-
-    .card p {
-      margin: 12px 0 24px;
-    }
-
-    .card img.hero {
-      width: 100%;
-      max-width: 340px;
-      border-radius: 12px;
-      margin: 10px 0 20px;
-    }
-
-    .paper-card {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .paper-card-inner {
-      height: 100%;
-      border-radius: 14px;
-      border: 1px solid #e5e7eb;
-      padding: 20px;
-      background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .paper-card-inner:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    }
-
-    .paper-card-header h3 {
-      font-size: 1.15rem;
-      line-height: 1.4;
-      margin: 8px 0 6px;
-    }
-
-    .paper-badge {
-      display: inline-block;
-      font-size: 0.7rem;
-      letter-spacing: 0.05em;
-      padding: 4px 8px;
-      border-radius: 6px;
-      background: #1d2087;
-      color: white;
-      font-weight: 600;
-    }
-
-    .paper-desc {
-      font-size: 0.9rem;
-      color: #444;
-      margin: 10px 0 12px;
-    }
-
-    .paper-points {
-      padding-left: 1.1em;
-      font-size: 0.85rem;
-      color: #333;
-      margin: 0 0 12px;
-    }
-
-    .paper-points li {
-      margin-bottom: 4px;
-    }
-
-    .paper-card-footer {
-      text-align: right;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #0068b6;
-    }
-
-    .link-btn {
-      align-self: flex-start;
-      background: var(--blue-deep);
-      color: #fff;
-      padding: 10px 22px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      letter-spacing: 0.02em;
-      transition: background 0.25s ease;
-    }
-
-    .link-btn:hover {
-      background: var(--blue-mid);
-    }
-
-    .fusion h2 span {
-      color: var(--blue-light);
-    }
-
-    .lean h2 span {
-      color: var(--blue-deep);
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px 10px 50px;
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 0.9rem;
-    }
-
-    @keyframes fadeInUp {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    .card:nth-child(1) { animation-delay: 0.2s; }
-    .card:nth-child(2) { animation-delay: 0.4s; }
-
-    /* small screens */
-    @media (max-width: 540px) {
-      .nav-right {
-        display: none;
-      }
-      header {
-        padding-top: 34px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -272,9 +22,19 @@
   </nav>
 
   <header>
-    <h1>AIBODが掲げるコンセプト</h1>
+    <h1>AIBODの企業パーパス</h1>
     <p>新しい技術を、使える技術に。</p>
   </header>
+
+  <!-- ▼ ビューモード切替 ▼ -->
+  <div class="mode-switch" aria-label="表示モード切り替え">
+    <button class="mode-btn active" data-mode="advanced">
+      専門業界ビュー
+    </button>
+    <button class="mode-btn" data-mode="sme">
+      中小企業DXビュー
+    </button>
+  </div>
 
   <main class="container">
     <!-- AI Fusion -->
@@ -290,16 +50,53 @@
     </section>
 
     <!-- Lean Integration -->
-    <section class="card lean" id="leanintegration">
+    <section class="card lean" id="leanintegration" data-mode="advanced">
       <h2><span>Lean</span> Integration</h2>
       <img src="https://aibod-github.github.io/aibod-whitepapers/images/lean_integration.png" alt="Lean Integration Concept" class="hero">
       <p>
-        開発よりも現場実装を最速で実現する実装コンセプト。<br>
-        小さく産んで大きく育てる──変化に即応する新しいIT導入のかたちです。<br>
-        UIファースト・ノーコード・軽量バックエンドで中小製造業のDXを支援します。
+        「開発」を飛び越え、まず「実装して現場で使う」実装コンセプト。<br>
+        最初から現場運用に近い形で実装し、使いながら要件を確定させていきます。<br>
+        当社AIBOD Factoryの製造物を利用して、現場で使えるサービスを作ります。
       </p>
       <a href="leanintegration/li.html" class="link-btn">Lean Integration ホワイトペーパーへ →</a>
     </section>
+    <section class="card lean" id="leanintegrationsmb" data-mode="sme">
+      <h2><span>Lean</span> Integration</h2>
+      <img src="https://aibod-github.github.io/aibod-whitepapers/images/lean_integration.png" alt="Lean Integration Concept" class="hero">
+      <p>
+        「小さく産んで大きく育てる」リーンインテグレーションの中小企業適用版。<br>
+        課題や実現したいことを即かたちにします。<br>
+        素早く作る画面と軽量サーバーで中小製造業のDXを支援します。
+      </p>
+      <a href="leanintegration/li_smb.html" class="link-btn">Lean Integration ホワイトペーパーへ →</a>
+    </section>
+
+    <!-- Concepts -->
+    <a class="paper-card" href="./concepts/li_ai_fusion.html">
+      <div class="paper-card-inner">
+        <div class="paper-card-header">
+          <span class="paper-badge">WHITE PAPER</span>
+          <h3>AI Fusion & Lean Integration<br>コンセプト</h3>
+        </div>
+        <div class="paper-card-body">
+          <p class="paper-desc">
+            現場でAIを使うことは、依然として難しい。
+            AIBODは、この問題を解決します。
+            <strong>「AIを賢くする」のではなく</strong><br>
+            <strong>「AIを“構造として”使えるようにする」</strong>を解説します。
+          </p>
+          <ul class="paper-points">
+            <li>Lean Integration：開発という時間を飛ばす思想</li>
+            <li>AI Fusion：知能を構造として設計する方法</li>
+            <li>AIBOD Factory：それらを即座に現場へ届ける製造装置</li>
+            <li>Physical Intelligence Architecture（PIA）：中核エンジン</li>
+          </ul>
+        </div>
+        <div class="paper-card-footer">
+          <span class="paper-link">▶ ホワイトペーパーを読む</span>
+        </div>
+      </div>
+    </a>
 
     <!-- Factory -->
     <a class="paper-card" href="./factory/factory.html">
@@ -326,12 +123,36 @@
         </div>
       </div>
     </a>
-    
+
   </main>
 
   <footer>
     <p>© 2025 AIBOD Inc. All Rights Reserved.</p>
   </footer>
+
+  <script>
+    // Mode switching functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const modeButtons = document.querySelectorAll('.mode-btn');
+
+      modeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const selectedMode = this.getAttribute('data-mode');
+
+          // Update active button state
+          modeButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+
+          // Update body class to switch views
+          if (selectedMode === 'sme') {
+            document.body.classList.add('sme-mode');
+          } else {
+            document.body.classList.remove('sme-mode');
+          }
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>
