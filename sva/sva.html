@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Structured Vertical Architecture（SVA）— ソフトウェアを「設計し、製造する」ための構造原則（AIBOD Whitepaper）" />
+  <title>SVA Whitepaper | AIBOD</title>
+
+  <style>
+    :root{
+      --aibod-primary:#6A7FAB;
+      --aibod-ink:#233042;
+      --aibod-bg:#FAFBF9;
+      --aibod-muted:#6A7FABCC;
+      --card:#ffffff;
+      --line:rgba(106,127,171,.22);
+      --shadow:0 10px 30px rgba(20,32,50,.10);
+      --radius:16px;
+      --radius2:22px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--aibod-ink);
+      background:linear-gradient(180deg, rgba(106,127,171,.06), transparent 520px), var(--aibod-bg);
+      line-heighttion:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1100px; margin:0 auto; padding:0 18px}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background:rgba(250,251,249,.78);
+      backdrop-filter:saturate(1.2) blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 0;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px; min-width:220px;
+    }
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      background:linear-gradient(140deg, var(--aibod-primary), rgba(106,127,171,.55));
+      box-shadow:0 8px 18px rgba(106,127,171,.25);
+    }
+    .brand .t1{font-weight:800; letter-spacing:.02em}
+    .brand .t2{font-size:12px; color:rgba(35,48,66,.68); margin-top:-2px}
+    .btns{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--aibod-ink);
+      padding:8px 12px;
+      border-radius:999px;
+      box-shadow:0 6px 18px rgba(20,32,50,.06);
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn.primary{
+      background:var(--aibod-primary);
+      color:var(--aibod-bg);
+      border-color:rgba(106,127,171,.55);
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0px)}
+    .hero{
+      padding:42px 0 18px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){
+      .hero-grid{grid-template-columns:1fr}
+      .brand{min-width:auto}
+    }
+    .hero-card{
+      background:linear-gradient(135deg, rgba(106,127,171,.14), rgba(255,255,255,.88));
+      border:1px solid var(--line);
+      border-radius:var(--radius2);
+      box-shadow:var(--shadow);
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card:before{
+      content:"";
+      position:absolute; inset:-40px -60px auto auto;
+      width:220px; height:220px;
+      background:radial-gradient(circle at 30% 30%, rgba(106,127,171,.35), transparent 60%);
+      transform:rotate(18deg);
+    }
+    .kicker{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+      color:rgba(35,48,66,.72);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      background:rgba(255,255,255,.7);
+      position:relative;
+      z-index:1;
+    }
+    h1{
+      margin:14px 0 10px;
+      font-size: clamp(26px, 3.2vw, 40px);
+      line-height:1.2;
+      position:relative;
+      z-index:1;
+    }
+    .sub{
+      margin:0;
+      color:rgba(35,48,66,.76);
+      font-size:15px;
+      position:relative;
+      z-index:1;
+    }
+    .hero-meta{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:16px;
+      position:relative;
+      z-index:1;
+    }
+    .pill{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.8);
+      border:1px solid var(--line);
+      color:rgba(35,48,66,.82);
+    }
+
+    .toc-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius2);
+      box-shadow:var(--shadow);
+      padding:18px 18px 12px;
+    }
+    .toc-title{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .toc-title h3{margin:0; font-size:14px}
+    .toc-title span{font-size:12px; color:rgba(35,48,66,.60)}
+    .toc a{
+      display:flex; justify-content:space-between; gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      color:rgba(35,48,66,.88);
+    }
+    .toc a:hover{
+      background:rgba(106,127,171,.10);
+      text-decoration:none;
+    }
+    .toc small{color:rgba(35,48,66,.55); font-size:12px}
+
+    .section{
+      margin:22px 0;
+    }
+    .section-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius2);
+      box-shadow:0 10px 28px rgba(20,32,50,.07);
+      padding:22px;
+    }
+    .h2{
+      display:flex; align-items:baseline; gap:10px;
+      margin:0 0 10px;
+    }
+    .h2 .num{
+      font-weight:800;
+      color:var(--aibod-primary);
+      letter-spacing:.02em;
+    }
+    .h2 h2{
+      margin:0;
+      font-size: clamp(18px, 2.2vw, 26px);
+      line-height:1.25;
+    }
+    .lead{
+      color:rgba(35,48,66,.78);
+      margin-top:6px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 840px){
+      .grid-2{grid-template-columns:1fr}
+    }
+
+    .callout{
+      background:linear-gradient(180deg, rgba(106,127,171,.10), rgba(255,255,255,.92));
+      border:1px solid rgba(106,127,171,.26);
+      border-radius:16px;
+      padding:14px;
+    }
+    .callout b{color:rgba(35,48,66,.92)}
+    ul{margin:10px 0 0 18px}
+    li{margin:6px 0}
+    .table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid var(--line);
+      margin-top:12px;
+      background:#fff;
+    }
+    .table th, .table td{
+      padding:12px 12px;
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+      font-size:14px;
+    }
+    .table th{
+      background:rgba(106,127,171,.08);
+      color:rgba(35,48,66,.86);
+      text-align:left;
+      font-weight:700;
+    }
+    .table tr:last-child td{border-bottom:none}
+
+    .figure{
+      border:1px dashed rgba(106,127,171,.45);
+      background:rgba(106,127,171,.06);
+      border-radius:18px;
+      padding:16px;
+      margin-top:14px;
+    }
+    .figure h4{margin:0 0 6px; font-size:14px}
+    .figure p{margin:0; color:rgba(35,48,66,.72); font-size:13px}
+    .figure .box{
+      margin-top:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      padding:14px;
+      overflow:auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12px;
+      line-height:1.55;
+      color:rgba(35,48,66,.88);
+    }
+
+    .footer{
+      margin:30px 0 60px;
+      color:rgba(35,48,66,.62);
+      font-size:12px;
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      border-top:1px solid var(--line);
+      padding-top:16px;
+    }
+    .muted{color:rgba(35,48,66,.62)}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.85);
+      font-size:12px;
+    }
+    .lang-note{
+      font-size:12px;
+      color:rgba(35,48,66,.62);
+      margin-top:10px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="wrap">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <div class="t1">AIBOD Whitepapers</div>
+            <div class="t2">Structured Vertical Architecture (SVA)</div>
+          </div>
+        </div>
+
+        <div class="btns">
+          <a class="btn" href="../index.html">← Whitepapers</a>
+          <a cls="btn" href="../factory/factory.html">Factory</a>
+          <button class="btn" id="btnPrint" type="button">Print / PDF</button>
+          <button class="btn primary" id="btnTop" type="button">Top</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="hero-grid">
+        <div class="hero-card">
+          <span class="kicker">WHITEPAPER · SVA · STRUCTURE</span>
+          <h1>Structured Vertical Architecture（SVA）</h1>
+          <p class="sub">—「設計し、製造する」ための構造原則 —</p>
+
+          <div class="hero-meta">
+            <span class="pill">Layered Responsibility</span>
+            <span class="pill">Schema-First</span>
+            <span class="pill">VLP Comss="pill">Factory-ready</span>
+          </div>
+
+          <p class="lang-note">※本ページはホワイトペーパー本文（HTML版）です。図（SVG）や事例編は後続章として追加できます。</p>
+        </div>
+
+        <aside class="toc-card" aria-label="Table of contents">
+          <div class="toc-title">
+            <h3>目次</h3>
+            <span class="muted">SVA / v0.1</span>
+          </div>
+          <nav class="toc">
+            <a href="#sec1"><span>1. はじめに</span><small>背景</small></a>
+            <a href="#sec2"><span>2. SVAとは何か</span><small>定義</small></a>
+            <a href="#sec3"><span>3. なぜVerticalなのか</span><small>問題設定</small></a>
+            <a href="#sec4"><span>4. 基本レイヤ構造</span><small>L0〜L5</small></ll></a>
+            <a href="#sec7"><span>7. SVAとAIBOD Factory</span><small>製造設計</small></a>
+            <a href="#sec8"><span>8. 価値</span><small>技術/現場/事業</small></a>
+            <a href="#sec9"><span>9. おわりに</span><small>次章予告</small></a>
+          </nav>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 1 -->
+    <section class="section" id="sec1">
+      <div class="section-card">
+        <div class="h2">
+          <div class="num">01</div>
+     <p class="lead">
+          生成AIの登場により、<b>コードを書く速度</b>は劇的に向上しました。
+          しかし一方で、現場では次のような課題が依然として残っています。
+        </p>
+        <div class="grid-2">
+          <div class="callout">
+            <b>現場で起きてが、製品・運用に耐えない</li>
+              <li>現場ごとの差分対応が属人化する</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <b>AIBODの捉え方</b>
+       らは「技術」よりも「構造」の問題です。<br/>
+              速度を得るほど、構造不在のまま複雑性が積み上がã Vertical Architecture（SVA）</b>を定義しました。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <sectid="sec2">
+      <div class="section-card">
+        <div class="h2">
+          <div class="num">02</div>
+          <h2>SVAとは何か</h2>
+        </div>
+        <p class="lead">
+          <b>SVA（Structured Vertical Architecture）</b>とは、
+          システムを「目的 → 設計 → 機能 → 判断 → 接続 → 実行」という
+          <b>縦方向の責務構造</b>として整理し、変更・再利用・製造を前提に設計するアーキテクチャ規約です。
+        </p>
+
+        <table class="table" role="table" aria-label="SVA definition">
+          <thead>
+            <tr>
+              <th style="width:30%">SVAが含むもの</th>
+              <th>内容</th>
+            </tr>
+          </thead>
+ >実装規約</b></td>
+              <td>レイヤ責務を固定し、差し替え可能ポイントを明確にする</td>
+            </tr>
+            <tr>
+              <td><b>製造仕様</b></td>
+              <td>Schemaで設計図を固定し、生成・検査・再製造へ接続する</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="section" id="sec3">
+      <div class="section-card">
+        <div class="h2">
+          従来の多くのシステムは、機能追加・画面追加・業務フロー追加といった
+          <b>横方向の拡張</b>で成長してきました。
+          その結果、目的と実装の乖離、判断ロジックの分散、現場差分の吸収不能が発生します。
+        </p>
+
+        <di/li>
+              <li>既存接続が肥大化し、変更が止まる</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <b>SVAの打ち手</b>
+            <p class="muted" style="margin:行を縦に揃え、<br/>
+              レイヤ責務を固定することで、<b>変更・再利用・製造</b>を成立させます。
+      <!-- 4 -->
+    <section class="section" id="sec4">
+      <div class="section-card">
+        <div class="h2">
+          <div class="num">04</div>
+          <h2>SVAの基本レイヤ構造（L0〜L5）</h2>
+        </div>
+
+        <table class="table" role="table" aria-label="SVA layers">
+          <thead>
+            <tr>
+              <th style="width:16%">Layer</th>
+              <th style="width:30%">名称</th>
+              <th>責務</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>L0</b></td>
+              <td>Purpose / Policy</td>
+              <td>目的、制約、判断軸（KPI・ポリシー）</td>
+            </tr>
+            <tr>
+              <td><b>L1</b></td>
+              <td>Requirement / Schema</td>
+              <td>入出力、データ構造、設定、非機能要件（設計図を固定）</td>
+            </tr>
+           ルゴリズム）</td>
+            </tr>
+            <tr>
+              <td><b>L3</b></td>
+              <td>Orchestration / Flow</td>
+              <td>シーケンス、状態遷移、スケジューリング、人/AI/装置分担</td>
+            </tr>
+            <tr>
+              <td><b>L4</b></td>
+              <td>Interface / Adapter</td>
+              <td>API、UI、プロトコル変換、既存システム吸収</td>
+            </tr>
+            <tr>
+              <td><b>L5</b/td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="figure" role="note" aria-label="Figure placeholder">
+          <h4>図：SVA全体図（SVG差し込み推奨）</h4>
+          <p>ここに「SVA 1枚図（SVG）」を配置できます。後続で作成可能です。</p>
+          <div class="assets/sva_overview.svg" alt="SVA overview" style="max-width:100%;"&gt; --&gt;
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="section" id="sec5">
+      <div class="section-card">
+        <div class="h2">
+          <div class="num">05</div>
+          <h2>SVAの核心：設計図を「Schema」で固定する</h2ass="lead">
+          SVAにおいて最も重要なのが <b>L1：Schema Layer</b> です。
+          従来の要件定義（Excel/Word/曖昧な文章）を、
+          <b>機械可読な設計図（JSON Schema）</b>として固定します。
+        </p>
+
+        <div class="grid-2">
+          <div class="callout">
+            <b>Schema化で可能になること</b>
+            <ul>
+              <li>設計図の自動検証（Validation）</li>
+              <li>実装の自動生成（Scaffold / VibeCoding）</li>
+              <li>テスト自動化（Golden / Contract Test）</li>
+              <li>Factoryでの再製造（再現性）</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <b>最小のSchemaセット（例）</b>
+            <div class="badge" style="margin-top:10px">input.schema.json</div>
+            <div class="badge">output.schev>
+
+        <div class="figure">
+          <h4>例：Schema-Firstの最小骨格（擬似コード）</h4>
+          <p>設計図→製造→検査を成立させる最短パス</p>
+          <div class="box">
+1) Validate input.schema
+2) Load config
+3) Run L2 logic modules
+4) Update state (RUNNING -> DONE / ERROR)
+5) Emit output.schema
+6) Optionally emit events
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="section" id="sec6">
+    iv class="num">06</div>
+          <h2>VLPとの関係（可変分割）</h2>
+        </div>
+        <p class="lead">
+          SVAは<b>構造（レイヤ責務）を固定</b>しますが、現場適応のために
+          <b>Variable Layer Partitioning（VLP）</b>を併用します。
+          つまり「構造ãead>
+            <tr>
+              <th style="width:28%">フェーズ/状況</th>
+              <th>典型的な分割</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>PoC</b></td>
+              <td>L2〜L4をまとめて速く見せる（最短構成）</td>
+            </tr>
+            <tr>
+    ・スケール可能）</td>
+            </tr>
+            <tr>
+              <td><b>既存      <td>L4（Adapter）を厚くしてレガシーを吸収</td>
+            </tr>
+            <tr>
+              <td><b>AI検証</b></td>
+              <td>L2のみ差し替え（検証→本番へ滑らかに接続）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="section" id="sec7">
+      <div class="section-card">
+        <div class="h2">
+          <div class="num">07</div>
+          <h2>SVAとAIBOD Factory</h2>
+        </div>
+        <p class="lead">
+          SVAはAIBOD Factoryの<b>製造設計図</b>です。
+          Schemaで固定された設計図を起点に、部品・工程・治具・装置へ接続します。
+        </p>
+
+        <table class="table" aria-label="SVA to Factory mapping">
+         
+            <tr><td><b>L1 Schema</b></td><td>設計図</td></tr>
+            <tr><td><b>L2 Logic</b></td><td>部品</td></tr>
+            <tr><td><b>L3 Flow</b></td><td>工程</td></tr>
+            <tr><td><b>L4 Adapter</b></td><td>治具</td></tr>
+            <tr><td><b>L5 Execution</b></td><td>装置</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout" style="margin-top:14px">
+          <b>結論：</b>
+          <span class="muted">ソフトウェアは「作/div>
+    </section>
+
+    <!-- 8 -->
+    <section class="section" id="sec8">
+      <div class="section-card">
+        <div class="h2">
+          <div class="num">08</div>
+          <h2>SVAがもたらす価値</h2>
+        </div>
+
+        <div class="grid-2">
+          <div class="callout">
+            <b>技術的価値</          <li>変更耐性（責務分離と差し替え）</li>
+              <li>再利用性（部品化と契約）</li>
+              <li>AI統合の明確化（L2/L3）</li>
+            </ul>
+          </div>ul>
+              <li>属人性の排除（Schema固定）</li>
+              <li>差分対応の高速化（VLP）</li>
+              <li>PoC→本番の連続性（同一骨格）</li>
+            </ul>
+          </div>
+        </    <b>事業価値</b>
+          <ul>
+            <li>製品化速度</li>
+            <li>横展開（同型の製造）</li>
+            <li>協業・分業が容易（レイヤごとに役割定義できる）</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 -->
+    <section class="section" id="sec9">
+      <div class="section-card">
+        <div class="h2">
+          <div class="num">09</div>
+          <h2>おわりに</h2>
+        </div>
+        <p class="lead">
+          生成AI時代において重要なのは、「何を作るか」だけではなく
+          <b>「どう作れる構造を持つか」</b>です。
+        </p>
+        <p>
+          SVAは、AI・人・現場・装置をつなぐための<b>共通構造言語</b>として設計されていã マイクログリッド / EDOS</li>
+            <li>SVA × DIO（Distributed Intelligence Orchestrator）</li>
+            <li>SVA × AI Fusion</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <div>© AIBOD Inc. — Whitepaper: Structured Vertical Architecture (SVA)</div>
+      <div class="muted">Last updated: <span id="lastUpdated">2026-01-18</span></div>
+    </div>
+  </main>
+
+  <script>
+    // Smooth scroll for TOC links
+    document.q#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href');
+        const el = document.querySelector(id);
+        if(!el) return;
+        e.preventDefault();
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+        history.replaceState(null, '', id);
+      });
+    });
+
+    // Buttons
+    document.getElementById('btnTop').addEventListener('click', () => {
+      document.getElementById('top').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+
+    document.getElementById('btnPrint').addEventListener('click', () => window.print());
+
+    // Update "Last updated" (keep as fixed date by default; allow override)
+    // const today = new Date();
+    // document.getElementById('lastUpdated').textContent = today.toISOString().slice(0,10);
+  </script>
+</body>
+</html>
+
