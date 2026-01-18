@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>AIBOD Whitepaper｜Lean Integration × AI Fusion（PIA / SVA / VLP / DIO）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lean Integration（開発を飛ばした現場導入）とAI Fusion（構造としての知能設計）を統合し、AIBOD FactoryとPIA（SVA/VLP/DIO）で実現する全体像を整理したホワイトペーパー。" />
+
+  <!--
+    NOTE:
+    - This page intentionally reuses the same CSS tone/layout as factory/factory.html.
+    - Place this file at: /aibod-whitepapers/concepts/li_ai_fusion.html
+    - Logo path assumes: /aibod-whitepapers/images/aibod-logo.svg
+  -->
+
+  <style>
+    :root {
+      --blue-light: #00b3ec;
+      --blue-mid: #0068b6;
+      --blue-deep: #1d2087;
+
+      --bg: rgba(255,255,255,0.95);
+      --bg2: rgba(255,255,255,0.90);
+      --text: #222;
+      --muted: rgba(0,0,0,0.62);
+      --line: rgba(0,0,0,0.10);
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      --shadow2: 0 16px 30px rgba(0, 0, 0, 0.22);
+      --r: 16px;
+      --max: 1040px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Meiryo", sans-serif;
+      margin: 0;
+      color: var(--text);
+      line-height: 1.75;
+      background: linear-gradient(160deg, var(--blue-light) 0%, var(--blue-mid) 40%, var(--blue-deep) 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: 62px; /* navbar */
+    }
+    a { color: var(--blue-deep); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* --- Navbar --- */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 62px;
+      background: rgba(0, 50, 90, 0.55);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .nav-title {
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+    .nav-right a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 18px;
+      font-size: 0.9rem;
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
+    }
+    .nav-right a:hover { opacity: 1; }
+
+    @media (max-width: 920px) {
+      .nav-right { display: none; }
+    }
+
+    header {
+      text-align: center;
+      color: #fff;
+      padding: 46px 20px 20px;
+    }
+    header h1 {
+      font-size: 2.1rem;
+      margin: 0;
+      letter-spacing: 0.03em;
+    }
+    header p {
+      font-size: 1rem;
+      opacity: 0.92;
+      margin: 10px auto 0;
+      max-width: 900px;
+    }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.95);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    main {
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 10px 20px 80px;
+    }
+
+    .card {
+      background: var(--bg);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin: 18px 0;
+      border: 1px solid var(--line);
+    }
+
+    .sec h2, .toc h2 { margin-top: 0; }
+    .sec h2 {
+      font-size: 1.35rem;
+      letter-spacing: .02em;
+      margin-bottom: 10px;
+    }
+
+    .lead {
+      font-size: 1.02rem;
+      color: rgba(0,0,0,0.78);
+      margin-top: 8px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.95);
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      white-space: nowrap;
+    }
+
+    .toc ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+    }
+    .toc li { margin: 8px 0; }
+    .toc a { font-weight: 600; }
+
+    .quote {
+      border-left: 5px solid var(--blue-mid);
+      padding: 12px 14px;
+      background: rgba(0, 179, 236, 0.08);
+      border-radius: 12px;
+      margin: 14px 0;
+      font-weight: 700;
+    }
+
+    .callout {
+      background: rgba(29, 32, 135, 0.06);
+      border: 1px solid rgba(29, 32, 135, 0.12);
+      border-radius: 14px;
+      padding: 14px;
+      margin: 14px 0;
+      color: rgba(0,0,0,0.78);
+    }
+
+    .small {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 820px) {
+      .grid2 { grid-template-columns: 1fr; }
+    }
+    .mini {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      color: rgba(0,0,0,0.78);
+    }
+
+    .pillrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.12);
+      background: rgba(255,255,255,0.70);
+      font-size: 0.92rem;
+      color: rgba(0,0,0,0.75);
+    }
+
+    .diagram h2 {
+      margin: 0 0 12px;
+      font-size: 1.25rem;
+    }
+    .frame {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03);
+    }
+    .frame .pad {
+      padding: 10px;
+    }
+
+    code {
+      background: rgba(0,0,0,0.06);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    footer {
+      text-align: center;
+      color: rgba(255,255,255,0.85);
+      padding: 20px 10px 38px;
+      font-size: 0.92rem;
+    }
+
+    .fadein { animation: fadein 0.7s ease both; }
+    @keyframes fadein {
+      from {opacity: 0; transform: translateY(18px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* SVG helpers */
+    .svg-note {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Nav -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="../images/aibod-logo.svg" alt="AIBOD" style="height:34px;">
+      <div class="nav-title">AIBOD Whitepapers</div>
+    </div>
+    <div class="nav-right">
+      <a href="../index.html">Home</a>
+      <a href="#abstract">概要</a>
+      <a href="#li">LI</a>
+      <a href="#aifusion">AI Fusion</a>
+      <a href="#pia">PIA</a>
+      <a href="#connection">接続図</a>
+      <a href="#implications">示唆</a>
+    </div>
+  </nav>
+
+  <header class="fadein">
+    <div class="kicker">📄 Whitepaper / Lean Integration × AI Fusion</div>
+    <h1>開発を飛ばし、知能を製造する</h1>
+    <p>
+      <strong>Lean Integration（LI）</strong>＝開発工程を前提にせず「すぐ使う」を成立させる思想。<br/>
+      <strong>AI Fusion</strong>＝単体AIに依存せず、AI・ルール・人・デバイスを構造として融合する設計思想。<br/>
+      本ページは、両者が <strong>AIBOD Factory</strong> と <strong>PIA（SVA / VLP / DIO）</strong> を介して
+      どのように一体化しているかを、1枚の図式と分解図で整理します。
+    </p>
+    <div class="meta" aria-label="whitepaper meta">
+      <span class="badge">Version: v0.1</span>
+      <span class="badge">Focus: Fast Introduction</span>
+      <span class="badge">Target: SMEs / Partners / Engineers</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Diagram -->
+    <section class="card diagram" aria-label="connection diagram">
+      <h2>Concept Map（LI ↔ AI Fusion）</h2>
+      <div class="frame">
+        <div class="pad">
+          <!-- Inline SVG (no external file required) -->
+          <svg viewBox="0 0 1200 520" width="100%" height="auto" role="img" aria-label="Lean Integration and AI Fusion connection diagram">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#00b3ec" stop-opacity="0.18"/>
+                <stop offset="1" stop-color="#1d2087" stop-opacity="0.10"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#00b3ec" stop-opacity="0.22"/>
+                <stop offset="1" stop-color="#0068b6" stop-opacity="0.18"/>
+              </linearGradient>
+              <style>
+                .box { fill: #ffffff; stroke: rgba(0,0,0,0.12); stroke-width: 2; rx: 18; }
+                .hbox { fill: url(#g1); stroke: rgba(0,0,0,0.14); stroke-width: 2; rx: 20; }
+                .tag { fill: rgba(29,32,135,0.10); stroke: rgba(29,32,135,0.16); stroke-width: 2; rx: 999; }
+                .t { font-family: -apple-system,BlinkMacSystemFont,"Hiragino Sans","Meiryo",sans-serif; fill: rgba(0,0,0,0.82); }
+                .tw { fill: rgba(255,255,255,0.92); }
+                .title { font-size: 22px; font-weight: 800; }
+                .sub { font-size: 14px; fill: rgba(0,0,0,0.62); }
+                .k { font-size: 13px; font-weight: 700; fill: rgba(0,0,0,0.72); }
+                .line { stroke: rgba(29,32,135,0.55); stroke-width: 2.5; fill: none; }
+                .arrow { marker-end: url(#m); }
+              </style>
+              <marker id="m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(29,32,135,0.65)"></path>
+              </marker>
+            </defs>
+
+            <!-- Background -->
+            <rect x="10" y="10" width="1180" height="500" rx="26" fill="url(#g2)" stroke="rgba(0,0,0,0.06)"/>
+
+            <!-- Top (WHY) -->
+            <rect class="hbox" x="60" y="40" width="1080" height="88" rx="22"/>
+            <text class="t title tw" x="600" y="78" text-anchor="middle">WHY（思想）</text>
+            <text class="t tw" x="600" y="106" text-anchor="middle" style="font-size:14px; opacity:.92;">
+              「時間の革命」Lean Integration と「構造の革命」AI Fusion
+            </text>
+
+            <!-- LI -->
+            <rect class="box" x="80" y="160" width="460" height="120" rx="18"/>
+            <text class="t title" x="110" y="198">Lean Integration（LI）</text>
+            <text class="t sub" x="110" y="224">開発工程を前提にせず「まず使う」を成立させる</text>
+            <text class="t k" x="110" y="252">キーワード：</text>
+            <text class="t sub" x="200" y="252">PoC不要 / 個別開発不要 / 即導入→即改善</text>
+
+            <!-- AI Fusion -->
+            <rect class="box" x="660" y="160" width="460" height="120" rx="18"/>
+            <text class="t title" x="690" y="198">AI Fusion</text>
+            <text class="t sub" x="690" y="224">AI・ルール・人・デバイスを構造として融合する</text>
+            <text class="t k" x="690" y="252">キーワード：</text>
+            <text class="t sub" x="780" y="252">成立性 / 変化耐性 / 省データ / 現場差吸収</text>
+
+            <!-- Factory (bridge) -->
+            <rect class="hbox" x="280" y="310" width="640" height="88" rx="22"/>
+            <text class="t title tw" x="600" y="348" text-anchor="middle">AIBOD Factory（体現）</text>
+            <text class="t tw" x="600" y="372" text-anchor="middle" style="font-size:14px; opacity:.92;">
+              要件を「設計図」に落とし、製造ラインで“組み立てて”出荷する（開発ではなく製造）
+            </text>
+
+            <!-- PIA engine -->
+            <rect class="box" x="300" y="420" width="600" height="76" rx="18"/>
+            <text class="t title" x="600" y="450" text-anchor="middle">PIA（AI Fusionの体現）</text>
+            <text class="t sub" x="600" y="472" text-anchor="middle">SVA（秩序）＋ VLP（可塑）＋ DIO（統合実行）</text>
+
+            <!-- arrows -->
+            <path class="line arrow" d="M 310 280 C 360 300, 420 300, 450 310"/>
+            <path class="line arrow" d="M 890 280 C 840 300, 780 300, 750 310"/>
+            <path class="line arrow" d="M 600 398 C 600 408, 600 410, 600 420"/>
+
+            <!-- tags -->
+            <rect class="tag" x="92" y="286" width="180" height="32" rx="999"/>
+            <text class="t" x="182" y="307" text-anchor="middle" style="font-size:13px; font-weight:800; fill: rgba(29,32,135,0.78);">
+              時間を圧縮（導入）
+            </text>
+
+            <rect class="tag" x="928" y="286" width="180" height="32" rx="999"/>
+            <text class="t" x="1018" y="307" text-anchor="middle" style="font-size:13px; font-weight:800; fill: rgba(29,32,135,0.78);">
+              構造を最適化（設計）
+            </text>
+          </svg>
+
+          <div class="svg-note">
+            ※ 図はインラインSVGのため、Notion/PDF変換でも崩れにくい構成です（外部JS不要）。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOC -->
+    <section class="card toc" id="toc">
+      <h2>目次</h2>
+      <ul>
+        <li><a href="#abstract">1. アブストラクト（要約）</a></li>
+        <li><a href="#problem">2. 背景：なぜAI導入は難しいのか</a></li>
+        <li><a href="#li">3. Lean Integration（時間の革命）</a></li>
+        <li><a href="#aifusion">4. AI Fusion（構造の革命）</a></li>
+        <li><a href="#pia">5. PIA：AI Fusionの体現（SVA / VLP / DIO）</a></li>
+        <li><a href="#connection">6. LIへの接続：なぜ「開発を飛ばせる」のか</a></li>
+        <li><a href="#implications">7. 何が変わるか（示唆）</a></li>
+        <li><a href="#next">8. 次の版で深めるポイント</a></li>
+      </ul>
+    </section>
+
+    <!-- 1 Abstract -->
+    <section class="card sec" id="abstract">
+      <h2>1. アブストラクト（要約）</h2>
+      <p class="lead">
+        現場導入のボトルネックは、AIモデルの精度だけではありません。
+        <strong>設計の曖昧さ</strong>、<strong>属人化</strong>、<strong>品質保証</strong>、<strong>運用差分</strong>が、
+        「PoCが終わらない」「導入しても回らない」を生みます。
+      </p>
+      <div class="quote">
+        Lean Integration（LI）は「開発という時間」を圧縮する思想。AI Fusionは「知能を構造として組み上げる」設計思想。
+        AIBOD FactoryとPIA（SVA/VLP/DIO）が両者を接続し、“まず使う”を成立させる。
+      </div>
+      <div class="callout">
+        本ホワイトペーパーは <strong>Fast Introduction</strong> 版です。各要素（SVA / VLP / DIO）の仕様や、
+        JSON Schemaによる設計図化は、次版で拡張します。
+      </div>
+    </section>
+
+    <!-- 2 Problem -->
+    <section class="card sec" id="problem">
+      <h2>2. 背景：なぜAI導入は難しいのか</h2>
+      <p class="lead">
+        多くのAI導入は「十分なデータ」「安定した要件」「専門家の継続関与」を前提にしています。
+        しかし製造・物流・小売などの現場では、前提が成立しないケースが大半です。
+      </p>
+
+      <div class="grid2">
+        <div class="mini">
+          <strong>課題A：データが少ない／変わる</strong><br/>
+          新商品、設備差、現場差により学習データが追いつかない。
+        </div>
+        <div class="mini">
+          <strong>課題B：要件が使いながら決まる</strong><br/>
+          文章中心の要件は解釈分岐を生み、PoCが長期化する。
+        </div>
+        <div class="mini">
+          <strong>課題C：品質保証が後追い</strong><br/>
+          テストが最後に寄り、仕様とテストのズレが蓄積する。
+        </div>
+        <div class="mini">
+          <strong>課題D：運用差分が増殖する</strong><br/>
+          顧客差分がコードへ混入し、保守負債になる。
+        </div>
+      </div>
+
+      <div class="callout">
+        生成AIは「書く」を速くしますが、上記は「書く以前／以後」の問題です。よって必要なのは
+        <strong>設計と運用を“構造化”し、製造として扱う</strong> ことです。
+      </div>
+    </section>
+
+    <!-- 3 LI -->
+    <section class="card sec" id="li">
+      <h2>3. Lean Integration（時間の革命）</h2>
+      <p class="lead">
+        <strong>Lean Integration（LI）</strong> は、「速い開発」ではなく
+        <strong>開発工程を前提にしない導入モデル</strong>です。
+      </p>
+
+      <div class="mini">
+        <strong>定義：</strong><br/>
+        Lean Integrationとは、PoCや個別開発を前提とせず、まず現場で使える形で投入し、運用の中で改善を回すための思想である。
+      </div>
+
+      <div class="pillrow" aria-label="LI keywords">
+        <div class="pill">PoC不要</div>
+        <div class="pill">個別開発不要</div>
+        <div class="pill">即導入</div>
+        <div class="pill">即改善</div>
+        <div class="pill">再現性</div>
+        <div class="pill">Config中心</div>
+      </div>
+
+      <div class="callout">
+        LIが成立する条件は「開発を頑張る」ことではなく、<strong>設計図化と製造ライン化</strong>が存在することです。
+        それを体現するのが <strong>AIBOD Factory</strong> です。
+      </div>
+    </section>
+
+    <!-- 4 AI Fusion -->
+    <section class="card sec" id="aifusion">
+      <h2>4. AI Fusion（構造の革命）</h2>
+      <p class="lead">
+        <strong>AI Fusion</strong> は、単体AIモデルに依存せず、
+        AI・ルール・人・デバイスを「構造として融合」し、成立性と変化耐性を最大化する設計思想です。
+      </p>
+
+      <div class="grid2">
+        <div class="mini">
+          <strong>精度より成立性</strong><br/>
+          学習データが不足しても、ルール・人・デバイスで補完し止まらない。
+        </div>
+        <div class="mini">
+          <strong>変化耐性</strong><br/>
+          新商品・設備差・現場差に対して、構造の再配置で追随できる。
+        </div>
+      </div>
+
+      <div class="quote">
+        AI Fusionの本質は「賢いAIを作ること」ではなく、<strong>賢さを“構造”として使うこと</strong>にある。
+      </div>
+    </section>
+
+    <!-- 5 PIA -->
+    <section class="card sec" id="pia">
+      <h2>5. PIA：AI Fusionの体現（SVA / VLP / DIO）</h2>
+      <p class="lead">
+        <strong>Physical Intelligence Architecture（PIA）</strong> は、AI Fusionを実装可能な形に落としたアーキテクチャです。
+        中核は <strong>SVA（秩序）</strong>、<strong>VLP（可塑）</strong>、<strong>DIO（統合実行）</strong> の3要素です。
+      </p>
+
+      <div class="grid2">
+        <div class="mini">
+          <strong>SVA：Structured Vertical Architecture</strong><br/>
+          アプリ〜デバイス〜物理までを縦のレイヤーとして整理し、責任と変更点を固定する。
+        </div>
+        <div class="mini">
+          <strong>VLP：Variable Layer Partitioning</strong><br/>
+          AI/ルール/人/デバイスの境界を状況に応じて動かし、成立性と運用性を最適化する。
+        </div>
+        <div class="mini">
+          <strong>DIO：Distributed Intelligence Orchestrator</strong><br/>
+          分散した知能（AI/ルール/人/デバイス）を束ね、ルーティングと状態管理で“動くシステム”にする。
+        </div>
+        <div class="mini">
+          <strong>結論：コアエンジン</strong><br/>
+          AI Fusionの真髄は <strong>VLP × DIO</strong> にあり、現場差・省データ・継続改善を成立させる。
+        </div>
+      </div>
+
+      <div class="callout">
+        SVAは普遍骨格（Physicalがなくても成立）。一方、VLPとDIOは“現場で効くコアエンジン”です。
+      </div>
+    </section>
+
+    <!-- 6 Connection -->
+    <section class="card sec" id="connection">
+      <h2>6. LIへの接続：なぜ「開発を飛ばせる」のか</h2>
+      <p class="lead">
+        Lean Integrationが「魔法」ではない理由は、AIBOD Factoryが
+        <strong>PIAエンジンを即時に呼び出せる製造装置</strong>だからです。
+      </p>
+
+      <div class="mini">
+        <strong>従来：</strong> 要件 → 個別設計 → 実装 → テスト → PoC → 導入<br/>
+        <strong>LI：</strong> 要件 → AIBOD Factory（設計図化） → PIA（SVA/VLP/DIO）呼び出し → 即稼働
+      </div>
+
+      <div class="quote">
+        AIBOD Factoryは「AIを作らない」。<br/>
+        <strong>PIAをどう使うか（＝構造の選択）</strong>を決め、組み立てて出荷する。
+      </div>
+
+      <div class="grid2">
+        <div class="mini">
+          <strong>SVA（LI視点）</strong><br/>
+          毎回アーキテクチャを再発明しない。“縦の秩序”で思考を省力化。
+        </div>
+        <div class="mini">
+          <strong>VLP（LI視点）</strong><br/>
+          データ不足・現場差・更新頻度に応じて配置を変えるため、PoCを前提にしない。
+        </div>
+        <div class="mini">
+          <strong>DIO（LI視点）</strong><br/>
+          AIが未成熟でも、ルール・人への切り替えで止まらない。“まず使う”が成立する。
+        </div>
+        <div class="mini">
+          <strong>Factory（LI視点）</strong><br/>
+          製造ラインと検査を内蔵し、品質と再現性を“工程”として保証する。
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 Implications -->
+    <section class="card sec" id="implications">
+      <h2>7. 何が変わるか（示唆）</h2>
+      <p class="lead">
+        LI×AI Fusionが普及すると、AIは研究対象から“工業製品”へ移行します。
+        重要なのは「モデル性能」だけではなく、<strong>構造・工程・検査</strong>です。
+      </p>
+
+      <div class="grid2">
+        <div class="mini">
+          <strong>変化1：導入の初速</strong><br/>
+          “作ってから導入”ではなく、“導入してから改善”へ。
+        </div>
+        <div class="mini">
+          <strong>変化2：保守の設計</strong><br/>
+          差分はコードではなくConfigへ。運用差分の増殖を抑える。
+        </div>
+        <div class="mini">
+          <strong>変化3：品質保証の前倒し</strong><br/>
+          品質は「最後のテスト」ではなく「工程」に組み込む。
+        </div>
+        <div class="mini">
+          <strong>変化4：分散知能の標準化</strong><br/>
+          AI/ルール/人/デバイスを役割として束ね、再利用可能な設計へ。
+        </div>
+      </div>
+
+      <div class="callout">
+        これらは “AIを強くする” のではなく、<strong>AIが現場で成立する条件を整える</strong> 方向の変革です。
+      </div>
+    </section>
+
+    <!-- 8 Next -->
+    <section class="card sec" id="next">
+      <h2>8. 次の版で深めるポイント</h2>
+      <p class="lead">
+        次版（v0.2）では、概念を実装に接続するため、以下を追加します。
+      </p>
+      <ul>
+        <li><strong>設計図（Manufacturing Spec）</strong>：要件を構造化するJSON Schema（SVA対応）</li>
+        <li><strong>VLPの判断基準</strong>：データ量/レイテンシ/更新頻度/説明責任をパラメータ化</li>
+        <li><strong>DIOの最小実装</strong>：Routing/Policy/State/Audit/Feedbackのテンプレ</li>
+        <li><strong>ユースケース完全マッピング</strong>：CSV加工ライン or BAITEN STAND をPIAに写像</li>
+      </ul>
+      <div class="quote">
+        “開発を飛ばす” とは、工程を消すことではなく、<strong>工程を工業化し不可視化する</strong> ことである。
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 AIBOD Inc. All Rights Reserved.<br/>
+    本ページはホワイトペーパー（Fast Introduction）Web版です。用途（顧客向け/採用向け/パートナー向け）に応じて語彙・事例・熱量を最適化できます。
+  </footer>
+</body>
+</html>
+
