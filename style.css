@@ -316,3 +316,20 @@ body.sme-mode .card[data-mode="advanced"] {
 body.sme-mode .card[data-mode="sme"] {
   display: flex;
 }
+
+/* Paper card mode switching */
+.paper-card[data-mode="advanced"] {
+  display: block;
+}
+
+.paper-card[data-mode="sme"] {
+  display: none;
+}
+
+body.sme-mode .paper-card[data-mode="advanced"] {
+  display: none;
+}
+
+body.sme-mode .paper-card[data-mode="sme"] {
+  display: block;
+}
