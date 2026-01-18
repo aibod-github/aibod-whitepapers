@@ -333,3 +333,16 @@ body.sme-mode .paper-card[data-mode="advanced"] {
 body.sme-mode .paper-card[data-mode="sme"] {
   display: block;
 }
+
+/* SME mode paper card styling */
+.paper-card[data-mode="sme"] .paper-card-inner {
+  background: linear-gradient(180deg, rgba(232, 245, 233, 0.95) 0%, rgba(220, 237, 222, 0.95) 100%);
+}
+
+.paper-card[data-mode="sme"] .paper-badge {
+  background: #2e7d32;
+}
+
+.paper-card[data-mode="sme"] .paper-card-footer {
+  color: #2e7d32;
+}
