@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="760" viewBox="0 0 1400 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lean Integration × AI Fusion × AIBOD Factory × PIA concept map">
+  <defs>
+    <!-- AIBOD-ish gradient -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00b3ec" stop-opacity="0.22"/>
+      <stop offset="0.45" stop-color="#0068b6" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#1d2087" stop-opacity="0.14"/>
+    </linearGradient>
+
+    <linearGradient id="hdr" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00b3ec" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#1d2087" stop-opacity="0.18"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+
+    <style>
+      .t { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Meiryo", sans-serif; fill: rgba(0,0,0,0.82); }
+      .tw { fill: rgba(255,255,255,0.94); }
+      .title { font-size: 26px; font-weight: 800; letter-spacing: 0.02em; }
+      .h2 { font-size: 18px; font-weight: 800; }
+      .sub { font-size: 14px; fill: rgba(0,0,0,0.62); }
+      .k { font-size: 14px; font-weight: 800; fill: rgba(0,0,0,0.72); }
+      .small { font-size: 13px; fill: rgba(0,0,0,0.62); }
+      .box { fill: #ffffff; stroke: rgba(0,0,0,0.12); stroke-width: 2; rx: 18; filter: url(#shadow); }
+      .soft { fill: rgba(255,255,255,0.92); stroke: rgba(0,0,0,0.10); stroke-width: 2; rx: 20; filter: url(#shadow); }
+      .hdr { fill: url(#hdr); stroke: rgba(255,255,255,0.18); stroke-width: 2; rx: 22; }
+      .tag { fill: rgba(29,32,135,0.10); stroke: rgba(29,32,135,0.18); stroke-width: 2; rx: 999; }
+      .line { stroke: rgba(29,32,135,0.62); stroke-width: 3; fill: none; }
+      .dline { stroke: rgba(29,32,135,0.40); stroke-width: 2.5; stroke-dasharray: 8 8; fill: none; }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(29,32,135,0.65)"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="22" y="22" width="1356" height="716" rx="28" fill="url(#bg)" stroke="rgba(0,0,0,0.06)"/>
+
+  <!-- Header: WHY -->
+  <rect class="hdr" x="70" y="60" width="1260" height="92" rx="22"/>
+  <text class="t tw title" x="700" y="103" text-anchor="middle">WHY（思想）</text>
+  <text class="t tw" x="700" y="130" text-anchor="middle" style="font-size:15px; opacity:.92;">
+    「時間の革命」Lean Integration と「構造の革命」AI Fusion を、AIBOD Factory × PIA で統合する
+  </text>
+
+  <!-- Left: LI -->
+  <rect class="box" x="90" y="190" width="560" height="170" rx="18"/>
+  <text class="t title" x="125" y="235">Lean Integration（LI）</text>
+  <text class="t sub" x="125" y="264">開発工程を前提にせず、「まず使う」を成立させる思想（時間の圧縮）</text>
+  <text class="t k" x="125" y="297">キーワード：</text>
+  <text class="t sub" x="240" y="297">PoC不要 / 個別開発不要 / 即導入→即改善 / 再現性</text>
+
+  <!-- Right: AI Fusion -->
+  <rect class="box" x="750" y="190" width="560" height="170" rx="18"/>
+  <text class="t title" x="785" y="235">AI Fusion</text>
+  <text class="t sub" x="785" y="264">AI・ルール・人・デバイスを「構造として融合」し、成立性と変化耐性を最大化</text>
+  <text class="t k" x="785" y="297">キーワード：</text>
+  <text class="t sub" x="900" y="297">成立性 / 省データ / 現場差吸収 / 継続改善 / 説明可能性</text>
+
+  <!-- Tags under LI / AI Fusion -->
+  <rect class="tag" x="110" y="374" width="210" height="34" rx="999"/>
+  <text class="t" x="215" y="397" text-anchor="middle" style="font-size:13px; font-weight:800; fill: rgba(29,32,135,0.78);">時間を圧縮（導入）</text>
+
+  <rect class="tag" x="1080" y="374" width="210" height="34" rx="999"/>
+  <text class="t" x="1185" y="397" text-anchor="middle" style="font-size:13px; font-weight:800; fill: rgba(29,32,135,0.78);">構造を最適化（設計）</text>
+
+  <!-- Middle: Factory -->
+  <rect class="hdr" x="240" y="430" width="920" height="106" rx="22"/>
+  <text class="t tw title" x="700" y="476" text-anchor="middle">AIBOD Factory（体現）</text>
+  <text class="t tw" x="700" y="505" text-anchor="middle" style="font-size:15px; opacity:.92;">
+    要件を「設計図」に変換し、ライン化された工程で“組み立てて”出荷する（開発ではなく製造）
+  </text>
+
+  <!-- Bottom: PIA container -->
+  <rect class="soft" x="170" y="570" width="1060" height="150" rx="22"/>
+  <text class="t h2" x="700" y="610" text-anchor="middle">Physical Intelligence Architecture（PIA）— AI Fusion の体現</text>
+  <text class="t sub" x="700" y="634" text-anchor="middle">SVA（秩序） + VLP（可塑） + DIO（統合実行）</text>
+
+  <!-- PIA inner boxes -->
+  <rect class="box" x="220" y="650" width="280" height="56" rx="16"/>
+  <text class="t h2" x="360" y="685" text-anchor="middle">SVA</text>
+  <text class="t small" x="360" y="705" text-anchor="middle">縦の秩序 / 責任分割</text>
+
+  <rect class="box" x="560" y="650" width="280" height="56" rx="16"/>
+  <text class="t h2" x="700" y="685" text-anchor="middle">VLP</text>
+  <text class="t small" x="700" y="705" text-anchor="middle">境界を可変にする</text>
+
+  <rect class="box" x="900" y="650" width="280" height="56" rx="16"/>
+  <text class="t h2" x="1040" y="685" text-anchor="middle">DIO</text>
+  <text class="t small" x="1040" y="705" text-anchor="middle">分散知能を束ねて動かす</text>
+
+  <!-- Arrows: LI & AI Fusion -> Factory -->
+  <path class="line" d="M 370 360 C 420 410, 470 410, 520 430" marker-end="url(#arrow)"/>
+  <path class="line" d="M 1030 360 C 980 410, 930 410, 880 430" marker-end="url(#arrow)"/>
+
+  <!-- Arrow: Factory -> PIA -->
+  <path class="line" d="M 700 536 C 700 552, 700 556, 700 570" marker-end="url(#arrow)"/>
+
+  <!-- Dotted emphasis: VLP <-> DIO as core engine -->
+  <path class="dline" d="M 840 678 C 875 678, 885 678, 900 678"/>
+  <path class="dline" d="M 560 678 C 525 678, 515 678, 500 678"/>
+  <text class="t small" x="700" y="748" text-anchor="middle" style="fill: rgba(29,32,135,0.78); font-weight:800;">
+    Core Engine：VLP × DIO が「現場差 / 省データ / 継続改善」を成立させる
+  </text>
+
+  <!-- Footer note -->
+  <text class="t small" x="70" y="730" style="opacity:.9;">
+    AIBOD Whitepaper Diagram — LI × AI Fusion × Factory × PIA (SVA/VLP/DIO)
+  </text>
+</svg>
+

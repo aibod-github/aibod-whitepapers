@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AIBOD Whitepaper｜UI治具（UI Jig）でNon-ITが使えるソフトウェアを数時間で製造する</title>
+  <meta name="description" content="AIBOD Factoryの標準治具としてのUI治具（UI Jig）仕様。UI Schema駆動でフォーム生成し、EXE出荷でNon-ITに届ける。">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#0f1a33;
+      --panel2:#0d1730;
+      --text:#e9eefc;
+      --muted:#b9c6e6;
+      --line:rgba(255,255,255,.12);
+      --brand:#00b3ec;
+      --brand2:#0068b6;
+      --brand3:#1d2087;
+      --shadow: 0 12px 30px rgba(0,0,0,.25);
+      --radius:18px;
+      --radius2:24px;
+      --max: 1060px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      background:
+        radial-gradient(900px 480px at 10% 0%, rgba(0,179,236,.20), transparent 60%),
+        radial-gradient(900px 520px at 90% 10%, rgba(0,104,182,.18), transparent 58%),
+        linear-gradient(180deg, var(--bg), #060a14 80%);
+      color:var(--text);
+      line-height:1.75;
+    }
+    a{color:var(--brand); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 18px}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(6,10,20,.72);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar .inner{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 0}
+    .brand{
+      display:flex; align-items:center; gap:10px; min-width: 200px;
+      font-weight:800; letter-spacing:.2px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius:11px;
+      background:
+        conic-gradient(from 220deg, var(--brand), var(--brand2), var(--brand3), var(--brand));
+      box-shadow: 0 10px 20px rgba(0,179,236,.12);
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .brand span{opacity:.95}
+    nav{display:flex; gap:14px; flex-wrap:wrap; justify-content:flex-end}
+    nav a{
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:12px;
+      border:1px solid transparent;
+      transition:.15s ease;
+      font-weight:600;
+      font-size:14px;
+    }
+    nav a:hover{
+      color:var(--text);
+      border-color: rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      text-decoration:none;
+    }
+    .hero{padding:36px 0 18px}
+    .kicker{color:var(--muted); font-size:14px}
+    h1{margin:.25rem 0 .75rem; font-size:34px; line-height:1.25}
+    .lead{max-width: 860px; color:#d6e1ff; font-size:16px}
+    .meta{margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      color:var(--muted);
+      font-weight:600;
+      font-size:13px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:16px;
+      margin:18px 0 6px;
+    }
+    @media (max-width: 920px){
+      .grid{grid-template-columns:1fr}
+      nav{justify-content:flex-start}
+      .brand{min-width:auto}
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+    }
+    .card .pad{padding:18px 18px 16px}
+    .toc a{display:block; padding:8px 10px; border-radius:14px; color:var(--muted); font-weight:650}
+    .toc a:hover{background: rgba(255,255,255,.06); color:var(--text); text-decoration:none}
+    .two{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+    @media (max-width: 820px){ .two{grid-template-columns:1fr} }
+    section{margin:18px 0}
+    section .card{overflow:hidden}
+    .sec-head{
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background: rgba(0,179,236,.06);
+    }
+    h2{margin:0; font-size:22px}
+    h3{margin:18px 0 8px; font-size:18px}
+    p{margin:10px 0}
+    ul{margin:10px 0 10px 18px}
+    li{margin:6px 0}
+    .callout{
+      background: rgba(0,179,236,.07);
+      border: 1px solid rgba(0,179,236,.25);
+      border-radius: var(--radius);
+      padding:14px 14px;
+      margin:12px 0;
+      color:#d9f6ff;
+    }
+    .callout strong{color:#ffffff}
+    .mini{
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      padding:12px 12px;
+    }
+    pre{
+      margin:12px 0;
+      padding:12px 12px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      overflow:auto;
+    }
+    code, pre{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+    }
+    .footer{
+      padding:22px 0 34px;
+      color:rgba(233,238,252,.68);
+      font-size:13px;
+      border-top:1px solid var(--line);
+      margin-top:22px;
+    }
+    .tag{display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.16); color:rgba(233,238,252,.78); font-size:12px}
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="inner">
+        <div class="brand" aria-label="AIBOD Whitepapers">
+          <div class="logo" aria-hidden="true"></div>
+          <span>AIBOD Whitepapers</span>
+        </div>
+        <nav aria-label="primary">
+          <a href="../index.html">Home</a>
+          <a href="#abstract">概要</a>
+          <a href="#spec">標準仕様</a>
+          <a href="#schema">UI Schema</a>
+          <a href="#impl">実装</a>
+          <a href="#roadmap">ロードマップ</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <div class="kicker">Whitepaper / AIBOD Factory / UI Jig</div>
+      <h1>UI治具（UI Jig）で“Non‑ITが使える”ソフトウェアを数時間で製造する</h1>
+      <p class="lead">
+        生成AIでPythonコードは数分で作れるようになりました。しかし現場（事業計画・企画・運用）に渡すと、
+        「実行できない」「触って試せない」ために結局Excelへ戻ってしまいます。
+        AIBOD Factoryはこの断絶を、<b>UI治具</b>という標準工程で埋めます。
+        コアロジック（Python）に、テンプレ化されたUI治具（Tkinter）を被せ、PyInstallerでEXE出荷する。
+        その一連を “製造ライン” として固定し、Non‑ITが便利さを享受できる状態へ変換します。
+      </p>
+
+      <div class="meta">
+        <span class="pill">Version: <b>v0.1</b></span>
+        <span class="pill">Focus: <b>UI Jig / Windows EXE</b></span>
+        <span class="pill">Target: <b>SME / Biz Planners</b></span>
+        <span class="pill">Keywords: <b>Schema‑Driven / Repeatable</b></span>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="pad toc">
+            <div class="tag">目次</div>
+            <a href="#abstract">1. アブストラクト（要約）</a>
+            <a href="#problem">2. 背景：生成AIでコードは作れても現場は使えない</a>
+            <a href="#definition">3. 定義：UI治具とは何か</a>
+            <a href="#spec">4. 標準仕様：画面構成・入力治具・シナリオ</a>
+            <a href="#schema">5. UI Schema：設計図でUIを自動生成する</a>
+            <a href="#interface">6. 固定I/F：UIとコアの分離</a>
+            <a href="#delivery">7. 出荷工程：EXE化（PyInstaller）</a>
+            <a href="#case">8. 事例：サブスク損益分岐シミュレータ</a>
+            <a href="#roadmap">9. ロードマップ</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="pad">
+            <div class="tag">Key Message</div>
+            <h3 style="margin-top:10px">“コードの速さ”を“現場の速さ”に変換する</h3>
+            <p style="color:var(--muted); margin-top:6px">
+              Non‑ITの操作モデルはExcel型（数値を触る→即結果）です。
+              UI治具は、生成AIで作ったコアロジックを、その操作モデルに変換する「標準治具」です。
+            </p>
+            <div class="callout" style="margin-top:12px">
+              <strong>工場・治具・ラインがあるので、誰が作っても同じ品質で速い。</strong><br/>
+              これはUIにも当てはまります。UI治具で「作り方」を固定し、出荷形態（EXE）まで閉じます。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="abstract">
+      <div class="card">
+        <div class="sec-head"><h2>1. アブストラクト（要約）</h2></div>
+        <div class="pad">
+          <p>
+            生成AIによりコード生成は高速化しましたが、現場のボトルネックは「使える形で届かない」点に残ります。
+            Non‑ITはCLI実行や環境構築に慣れておらず、数値を触って結果を見るExcel的な操作モデルが前提です。
+            AIBOD Factoryは、コアロジック（Python）に<strong>UI治具（Tkinterテンプレ）</strong>を取り付け、
+            <strong>PyInstallerでEXE出荷</strong>する標準工程を定義し、数時間で「現場が使えるソフト」を製造します。
+          </p>
+          <ul>
+            <li>UIをコードで直書きせず、<strong>UI Schema（JSON）</strong>で定義して自動生成する</li>
+            <li>UIとコアのI/Fを固定し、ロジック差し替えで横展開できる</li>
+            <li>配布摩擦を下げるため、Windows向けEXE出荷を標準にする</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="problem">
+      <div class="card">
+        <div class="sec-head"><h2>2. 背景：生成AIでコードは作れても現場は使えない</h2></div>
+        <div class="pad">
+          <p>
+            PythonはITに慣れた人にとって、最短距離で価値を生みます。一方、事業計画や現場改善の担当者に渡すと、
+            「どう実行するのか分からない」「数字を変えて試せない」ため、結果としてExcelに回帰します。
+          </p>
+          <div class="two">
+            <div class="mini">
+              <h3>Non‑ITの現実</h3>
+              <ul>
+                <li>環境構築・依存関係の解決ができない</li>
+                <li>コマンド実行が心理的ハードル</li>
+                <li>入力→結果の往復が遅い</li>
+                <li>結局、Excelで作り直す</li>
+              </ul>
+            </div>
+            <div class="mini">
+              <h3>本質：操作モデルの断絶</h3>
+              <ul>
+                <li>IT：プロンプト→コード→検証→修正</li>
+                <li>Non‑IT：数値を触る→即結果→比較→意思決定</li>
+                <li>同じ生成AIでも“使い方”が違う</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout">
+            <strong>Non‑ITに必要なのは「コード」ではなく「つまみ（UI治具）」です。</strong>
+            UI治具は、生成AIの高速さを“現場の速さ”へ変換します。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="definition">
+      <div class="card">
+        <div class="sec-head"><h2>3. 定義：UI治具（UI Jig）とは何か</h2></div>
+        <div class="pad">
+          <p>
+            UI治具とは、AIBOD Factoryにおける<strong>標準UI部品・標準レイアウト・標準I/F</strong>の集合です。
+            UIを個別開発せず、治具として“作り方を固定”し、誰が作っても同品質・短時間で出荷できる状態を作ります。
+          </p>
+          <h3>UI治具の目的</h3>
+          <ul>
+            <li><strong>Excel脳</strong>（数値を触る→即結果）に合わせた操作モデルを提供する</li>
+            <li>UIとコアを分離し、ロジック差し替えで別テーマへ横展開する</li>
+            <li>EXE出荷を前提に、導入摩擦（インストール/環境構築）を最小化する</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="spec">
+      <div class="card">
+        <div class="sec-head"><h2>4. 標準仕様（v0.1）：画面構成・入力治具・シナリオ</h2></div>
+        <div class="pad">
+          <h3>4.1 画面構成（標準レイアウト）</h3>
+          <ul>
+            <li><strong>左：</strong>入力パネル（Parameter Panel）— セクション分割</li>
+            <li><strong>右上：</strong>結果サマリ（KPI）— 損益分岐月/累積利益/顧客数/売上など</li>
+            <li><strong>右下：</strong>グラフ（Charts）— 売上・費用、累積利益、顧客数の推移</li>
+            <li><strong>下：</strong>操作バー（Action Bar）— 計算/初期値/保存/読込/CSV出力</li>
+          </ul>
+
+          <h3>4.2 入力治具（NumericField）ルール</h3>
+          <div class="two">
+            <div class="mini">
+              <ul>
+                <li>単位を必ず表示（円、%、人、月）</li>
+                <li>初期値を必ず持つ</li>
+                <li>計算時にバリデーション（min/max）</li>
+                <li>入力・結果を同一画面に集約</li>
+              </ul>
+            </div>
+            <div class="mini">
+              <ul>
+                <li>“新しいUI学習”を要求しない</li>
+                <li>「なんか見たことある」が最強</li>
+                <li>色演出より一貫性を優先</li>
+                <li>失敗しても落ちない（エラー表示）</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>4.3 シナリオ治具（ScenarioManager）</h3>
+          <ul>
+            <li>条件セットをJSONで保存/読込</li>
+            <li>Non‑ITの「比較して考える」を支援</li>
+            <li>CSV出力でExcel連携（戻り口）を確保</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="schema">
+      <div class="card">
+        <div class="sec-head"><h2>5. UI Schema（設計図）でUIを自動生成する</h2></div>
+        <div class="pad">
+          <p>
+            AIBOD Factoryの量産性を決めるのは、<strong>UIをコードで書かない</strong>ことです。
+            入力項目・セクション・KPI・グラフ定義をUI Schema（JSON）で持ち、UIはそれを読み込んで自動生成します。
+          </p>
+          <div class="callout">
+            <strong>要件整理（プロンプト）→ UI Schema → UI自動生成</strong><br/>
+            ここが固定されると、別テーマでも「schema差し替え」で即ツール化できます。
+          </div>
+
+          <h3>UI Schemaの最低要素</h3>
+          <ul>
+            <li>sections: 入力セクションとフィールド定義（key/label/type/unit/default/min/max）</li>
+            <li>kpi: KPI表示の定義</li>
+            <li>charts: グラフの表示定義</li>
+          </ul>
+
+          <h3>（例）UI Schemaのイメージ</h3>
+          <pre><code>{
+  "title": "サブスク損益分岐シミュレータ",
+  "sections": [
+    {"name":"収益","fields":[
+      {"key":"monthly_price","label":"月額料金","type":"int","unit":"円/月","default":15000,"min":0,"step":500}
+    ]}
+  ],
+  "kpi":[{"key":"breakeven_month","label":"損益分岐月"}],
+  "charts":[{"type":"line","y":["monthly_revenue","monthly_cost"],"label":"月次 売上/費用"}]
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="interface">
+      <div class="card">
+        <div class="sec-head"><h2>6. 固定I/F：UIとコアの分離</h2></div>
+        <div class="pad">
+          <p>
+            UI治具はコアロジックを知らず、コアはUIを知りません。Factoryとして横展開するために、I/Fを固定します。
+          </p>
+          <div class="two">
+            <div class="mini">
+              <h3>UI → Core</h3>
+              <pre><code>params: dict  # key: string, value: number</code></pre>
+              <p style="color:var(--muted); margin:6px 0 0">
+                例：monthly_price, churn_rate, simulation_months...
+              </p>
+            </div>
+            <div class="mini">
+              <h3>Core → UI</h3>
+              <pre><code>summary: dict          # KPI
+timeseries: DataFrame  # month-by-month</code></pre>
+              <p style="color:var(--muted); margin:6px 0 0">
+                UIはKPIと推移を描ければよい（形式は十分）
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="delivery">
+      <div class="card">
+        <div class="sec-head"><h2>7. 出荷工程：EXE化（PyInstaller）</h2></div>
+        <div class="pad">
+          <p>
+            Non‑ITに届ける上で「環境構築が必要」は致命傷です。そこでUI治具ラインは、EXE出荷を標準工程とします。
+          </p>
+          <h3>標準（推奨）</h3>
+          <ul>
+            <li>最初は <strong>onedir</strong>（トラブルが少ない）</li>
+            <li>ui_schema.json / scenarios/ を同階層に置き、差し替え可能にする</li>
+            <li>ユーザーが触るのは scenarios/ のみ（運用治具）</li>
+          </ul>
+          <pre><code>pyinstaller --noconfirm --clean --onedir --windowed ^
+  --add-data "ui_schema.json;." ^
+  main.py</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="case">
+      <div class="card">
+        <div class="sec-head"><h2>8. 事例：サブスク損益分岐シミュレータ</h2></div>
+        <div class="pad">
+          <p>
+            サブスク事業の損益分岐点を、月次でシミュレートするツールを対象に、UI治具ラインを適用しました。
+          </p>
+          <ul>
+            <li><strong>コア：</strong>Python（損益・顧客推移の計算）</li>
+            <li><strong>UI治具：</strong>Tkinterテンプレ（Schema駆動フォーム生成）</li>
+            <li><strong>出荷：</strong>PyInstaller（Windows EXE）</li>
+            <li><strong>現場体験：</strong>入力→計算→KPI/グラフ→シナリオ保存→CSV出力</li>
+          </ul>
+          <div class="callout">
+            <strong>Pythonを使える人だけの道具</strong>を、<strong>Non‑ITが触れる道具</strong>へ変換できた。<br/>
+            “開発”ではなく“製造”として成立する、最小の成功パターン。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="card">
+        <div class="sec-head"><h2>9. ロードマップ（v0.2以降）</h2></div>
+        <div class="pad">
+          <h3>v0.2：利用性強化（Non‑ITの満足度を上げる）</h3>
+          <ul>
+            <li>グラフ凡例の日本語化（schemaでlabelMap）</li>
+            <li>シナリオ比較（2〜3ケースの重ね描き）</li>
+            <li>重要パラメータのスライダー化（料金・解約率など）</li>
+          </ul>
+
+          <h3>v0.3：Factoryライン化（量産性を上げる）</h3>
+          <ul>
+            <li>UI Schemaテンプレライブラリ化（見積・在庫・投資・工程能力など）</li>
+            <li>「要件→UI Schema→Core雛形」生成のプロンプトパターン確立</li>
+            <li>署名/バージョン表示/更新通知など運用治具</li>
+          </ul>
+
+          <div class="callout">
+            <strong>まとめ：</strong>生成AIで作るのは「コード」だけではない。<br/>
+            Non‑ITが便利さを享受するための“治具”を、Factoryの標準工程として固定する。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <div class="wrap" style="padding:0">
+        © 2026 AIBOD Inc. All Rights Reserved. / AIBOD Factory Whitepaper (UI Jig) v0.1
+      </div>
+    </div>
+  </main>
+</body>
+</html>

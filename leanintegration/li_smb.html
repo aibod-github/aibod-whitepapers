@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Lean Integration (中小企業向け) | AIBOD ホワイトペーパー</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --blue-light: #00b3ec;
+      --blue-mid: #0068b6;
+      --blue-deep: #1d2087;
+      --gray-bg: #f6f9fc;
+      --text: #222;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Meiryo", sans-serif;
+      margin: 0;
+      color: var(--text);
+      background: var(--gray-bg);
+      line-height: 1.7;
+      padding-top: 64px;
+    }
+
+    /* --- Navbar --- */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: linear-gradient(90deg, var(--blue-light), var(--blue-mid), var(--blue-deep));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      color: #fff;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-box {
+      width: 34px; height: 34px;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.8rem;
+      letter-spacing: -0.02em;
+    }
+    .nav-title {
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .nav-right a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 0.9rem;
+      opacity: 0.9;
+      transition: opacity .2s ease;
+    }
+    .nav-right a:hover {
+      opacity: 1;
+    }
+
+    header {
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 50px 20px 20px;
+    }
+    header h1 {
+      font-size: 2rem;
+      color: var(--blue-deep);
+      margin-bottom: 10px;
+    }
+    header p {
+      color: #333;
+      font-size: 1.1rem;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 40px 30px 60px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    h2 {
+      color: var(--blue-mid);
+      margin-top: 2em;
+      border-left: 5px solid var(--blue-light);
+      padding-left: 10px;
+    }
+    h3 {
+      color: var(--blue-deep);
+      margin-top: 1.2em;
+    }
+    p {
+      margin-bottom: 1em;
+    }
+    ul {
+      margin-bottom: 1em;
+      padding-left: 1.4em;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 10px 60px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 540px) {
+      .nav-right { display: none; }
+      header { padding-top: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ナビバー -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo-box">A</div>
+      <div class="nav-title">AIBOD</div>
+    </div>
+    <div class="nav-right">
+      <a href="../">Home</a>
+      <a href="../aifusion/">AI Fusion</a>
+      <a href="../leanintegration/">Lean Integration</a>
+    </div>
+  </nav>
+
+  <header>
+    <h1>Lean Integration</h1>
+    <p>中小製造業のための「小さく産んで大きく育てる」デジタル変革戦略</p>
+  </header>
+
+  <main>
+    <h2>1️⃣ はじめに：中小ものづくり企業を取り巻く現実</h2>
+    <p>
+      近年、ものづくり現場ではデジタル化・AI・自動化の波が急速に押し寄せています。  
+      しかし、多くの中小製造業は「高額なシステム導入」や「現場との乖離」が課題となり、DXの第一歩を踏み出せずにいます。
+    </p>
+
+    <h2>2️⃣ 課題の本質：大規模開発のリスクと現場乖離</h2>
+    <p>
+      従来のシステム導入は、要件定義から運用開始まで長期化する傾向があります。  
+      この間に市場や現場が変化し、完成した頃には「使えないシステム」となることも少なくありません。
+    </p>
+
+    <h2>3️⃣ Lean Integrationとは</h2>
+    <p>
+      AIBODが提唱するLean Integrationは、  
+      <strong>「小さく産んで大きく育てる」</strong>アプローチによって、  
+      現場の課題解決から始める実践的なDX手法です。
+    </p>
+    <ul>
+      <li>最小限の範囲から実装し、現場でのフィードバックを反映</li>
+      <li>ノーコード＋軽量バックエンドで短期導入</li>
+      <li>変化に強く、拡張可能なシステム設計</li>
+    </ul>
+
+    <h2>4️⃣ 技術構成（AIBODベースシステム）</h2>
+    <h3>UIレイヤ</h3>
+    <p><strong>FlutterFlow</strong>を用いて現場向けアプリを迅速に構築し、<strong>Grafana</strong>で経営者向け可視化ダッシュボードを実現します。</p>
+
+    <h3>バックエンド</h3>
+    <p><strong>Django（Python）</strong>を採用。API開発、DBアクセス、スレッド処理などを短期間で構築でき、UI中心の設計に最適です。</p>
+
+    <h3>データレイヤ</h3>
+    <p><strong>MySQL / PostgreSQL</strong>を使用し、既存DBとの連携やローカル保存にも柔軟に対応します。</p>
+
+    <h3>実行環境</h3>
+    <p>
+      工場内MiniPCやクラウド（AWS, GCP）など、現場のネットワーク環境に応じて選択可能です。
+    </p>
+
+    <h2>5️⃣ 導入ステップ</h2>
+    <ol>
+      <li>UIファーストで最小限のPoCを実施（1〜2週間）</li>
+      <li>現場のフィードバックで改善を重ねる</li>
+      <li>データ活用・AI自動化へ段階的に拡張</li>
+    </ol>
+
+    <h2>6️⃣ 導入効果</h2>
+    <ul>
+      <li>現場と経営の情報ギャップを解消</li>
+      <li>データドリブンな改善文化の定着</li>
+      <li>AI導入のための基盤が自然に整う</li>
+      <li>短期間・低コストでDXが実現可能</li>
+    </ul>
+
+    <h2>7️⃣ まとめ</h2>
+    <p>
+      Lean Integrationは、中小製造業が「まず動かす」「使いながら育てる」「AI化する」プロセスを支援するAIBOD独自のフレームワークです。  
+      現場と経営をつなぎ、小さな成功体験を積み重ねながら変化に強いものづくりを実現します。
+    </p>
+
+    <h2>📞 お問い合わせ</h2>
+    <p>
+      <strong>株式会社AIBOD</strong><br>
+      Email: customer@aibod.com<br>
+      Web: <a href="https://www.aibod.com" target="_blank">https://www.aibod.com</a>
+    </p>
+  </main>
+
+  <footer>
+    <p>© 2025 AIBOD Inc. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
+
